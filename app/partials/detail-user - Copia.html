@@ -1,0 +1,26 @@
+<!--
+<p>
+  Showing of 'interpolate' filter:
+  {{ 'Current version is v%VERSION%.' | interpolate }}
+</p>
+-->
+<h3>::: Detail :::</h3>
+<div ng-controller="DetailController">
+	<form>
+		<p>{{user.id}}</p>
+		<p>
+			<label for="firstname">FirstName</label>
+			<input ng-model="user.firstname" id="firstname" type="text">
+		</p>	
+		<p>
+			<label for="surname">SurName</label>
+			<input ng-model="user.surname" id="surname" type="text">
+		</p>	
+		<p>
+			<input ng-click="cancelarUser()" type="button" value="cancel">
+			-
+			<input ng-click="atualizarUser()" type="button" value="edit">
+		</p>
+	</form>		
+</div>
+

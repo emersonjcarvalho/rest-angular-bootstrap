@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> 
+<html lang="en" ng-app="crudApp" class="no-js"> 
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
+  <link rel="stylesheet" href="css/app.css"/>
+  
+  <!-- style for datapicker (angular-ui-date) -->
+  <!--<link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>-->
+  <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+  
+  <link rel="stylesheet" href="bower_components/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+  <noscript>
+    <h3>
+      Your [Browser] does not support JavaScript or is disabled. 
+    </h3>
+  </noscript>  
+  <br>
+  <div>
+    <h3>Header of Template</h3>
+    <ul class="menu">
+      <li><a href="#/vw-solicitacao-form">Formulario</a></li>
+      <li><a href="#/vw-list-user">List</a></li>
+      <li><a href="#/vw-detail-user">Detail</a></li>
+      <li><a href="#/vw-create-user">Create</a></li>
+    </ul>
+  </div>
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <div ng-view></div>
+  <hr>
+  <h3>Footer of Template</h3>
+  <!--
+  <div>Angular seed app: v<span app-version></span></div>
+-->
+
+ 
+  <!-- ### angular-ui-date e dependencias ### -->	
+  <script type="text/javascript" src="bower_components/jquery/v1.11/jquery-1.11.1.min.js"></script>
+  
+  <script type="text/javascript" src="bower_components/jquery-ui/v1.11/jquery-ui.min.js"></script> 
+
+
+  <script src="bower_components/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  
+  <script type="text/javascript" src="bower_components/angular-ui/bootstrap/ui-bootstrap-tpls-0.11.0.min.js"></script>
+
+  <script type="text/javascript" src="bower_components/angular-ui-date/date.js"></script>
+  <script type="text/javascript" src="bower_components/moment.js"></script>
+
+
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!--
+<p>
+  Showing of 'interpolate' filter:
+  {{ 'Current version is v%VERSION%.' | interpolate }}
+</p>
+-->
+<h3>::: Detail :::</h3>
+<div ng-controller="DetailController">
+
+
+	 <label>Select 44444: <input type="text" ui-date="{changeYear: true, changeMonth: true}" ng-model="aDate"></label>
+  	 <div>{{aDate}}</div>
+
+  	 <input ng-click="testDate()" type="button" value="Save">
+
+
+<!--
+	<p class="input-group">
+        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+-->            
+
+</div>
+
+
+

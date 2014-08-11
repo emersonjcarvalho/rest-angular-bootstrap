@@ -1,0 +1,65 @@
+<style type="text/css">
+    .css-form input.ng-invalid.ng-dirty {
+        background-color: #FA787E;
+    }
+
+    .css-form input.ng-valid.ng-dirty {
+        background-color: #78FA89;
+    }
+</style>
+
+<h3>::: Create :::</h3>
+
+<div ng-controller="CreateController">
+    <form name="formFile" novalidate class="css-form">
+        <input type="file" ng-model="document" valid-file required>
+        <input type="submit" value="Send" ng-disabled="formFile.$invalid">
+    </form>    
+    <hr>    
+    
+    <form name="formUser" novalidate class="css-form">
+        <p>
+            <!--<label for="username">username</label>-->
+            <input ng-model="user.username" id="username" type="text" required placeholder="UserName">
+        </p>
+    </form>
+    
+    <form novalidate="novalidate" name="formUser" class="css-form">
+        <p>ID: {{user.id}}</p>
+        
+        
+        <p>
+            <label for="password">password</label>
+            <input ng-model="user.password" id="password" type="number" required>
+        </p>	
+        <p>
+            <label for="email">email</label>
+            <input ng-model="email" id="email" type="email" required>
+        </p>
+        <p>
+            <label for="enable">enable</label>
+            <input ng-model="user.enable" id="enable" type="checkbox">
+        </p>
+        <hr>
+        <p>
+            <input name="tempData" 
+                   ng-pattern='/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d)|([2-9]\d{3})$/'
+                   required ng-model="tempData" type="text">
+            <!--<span ng-show="formUser.tempData.$error.required">Date Required!</span>-->
+            <span ng-show="formUser.tempData.$error.pattern">Incorrect Format, should be MM/DD/YYYY</span>
+        </p>
+        <p>               
+            <select ng-model="myColor" ng-options="campus.descricao for campus in campusList">
+                <option value="">-- select --</option>
+            </select>
+        </p>
+        <hr>
+        <p>
+            {{campusList}}
+        </p>
+
+        <p>
+            <input ng-click="salvarUser()" type="button" value="Save" ng-disabled="formUser.$invalid">			
+        </p>
+    </form>	        
+</div>

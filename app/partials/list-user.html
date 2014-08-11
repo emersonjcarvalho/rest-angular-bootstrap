@@ -1,0 +1,30 @@
+<div ng-controller="ListController">
+	<input type="text" ng-model="fsearch">
+
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>UserName</th>
+				<th>Password</th>
+                                <th>Status</th>
+				<th> </th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="user in UserList | filter:fsearch">
+				<td>{{user.id}}</td>
+				<td>{{user.username}}</td>
+				<td>{{user.password}}</td>
+                                <td>{{user.enable}}</td>
+				<td><input ng-click="editarUser(user.id)" type="button" value="edit"></td>
+				<td><input ng-click="deleteUser(user.id)" type="button" value="delete"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>
+		<input ng-click="criarUser()" type="button" value="Novo">
+	</p>
+</div>
