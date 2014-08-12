@@ -3,8 +3,9 @@
 var appDependencies = [ 
   'ngRoute',
   'ngResource',  
-  'ui.bootstrap',
+  //'ui.bootstrap',
   'ui.date',
+  'angularFileUpload',
   'crudApp.filters',
   'crudApp.services',
   'crudApp.directives',
@@ -22,6 +23,9 @@ crudApp.config(['$routeProvider','$sceDelegateProvider','$httpProvider', functio
 
   $routeProvider.when('/vw-solicitacao-form', {templateUrl: 'partials/solicitacao-form.html', controller: 'SolicitacaoController'});
 
+  $routeProvider.when('/vw-upload-foto', {templateUrl: 'partials/upload-foto.html', controller: 'UploadFotoController'});
+
+  
   $routeProvider.otherwise({redirectTo: '/vw-list-user'});
   
   

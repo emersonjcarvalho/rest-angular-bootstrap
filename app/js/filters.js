@@ -7,12 +7,14 @@ angular.module('crudApp.filters', [])
     return function(text) {
       return String(text).replace(/\%VERSION\%/mg, version);
     };
-  }])
+  }]);
 
+/**
 .filter('toYear', function () {
      return function (dateString) {
          var dateObject = new Date(dateString);
          return dateObject.getFullYear();
      };
 });
-  ;
+**/
+  

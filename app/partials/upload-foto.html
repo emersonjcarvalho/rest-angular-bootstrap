@@ -1,0 +1,59 @@
+
+<link type="text/css" rel="stylesheet" href="common.css">
+<script type="text/javascript">
+FileAPI = {
+	debug: true,
+	//forceLoad: true, html5: false //to debug flash in HTML5 browsers
+	//wrapInsideDiv: true, //experimental for fixing css issues
+	//only one of jsPath or jsUrl.
+    //jsPath: '/js/FileAPI.min.js/folder/', 
+    //jsUrl: 'yourcdn.com/js/FileAPI.min.js',
+
+    //only one of staticPath or flashUrl.
+    //staticPath: '/flash/FileAPI.flash.swf/folder/'
+    //flashUrl: 'yourcdn.com/js/FileAPI.flash.swf'
+};
+</script>
+
+<h3>::: UploadFotoController :::</h3>
+
+<div ng-controller="UploadFotoController">
+	
+		<div class="upload-div">
+		  <p>
+			<b>uploadUrl: </b> {{uploadUrl}}
+		  </p>
+
+  myModel: <input type="text" ng-model="myModel"> model object to be sent with the file.<br/>
+		<hr>
+		
+		<div class="upload-buttons">
+			FOTO: <input type="file" ng-file-select="onFileSelect($files)" onclick="this.value=null">
+			<br/>
+		</div>
+		       							
+		<div class="err" ng-show="errorMsg != null">{{errorMsg}}</div>
+		<br/>
+		Progress:
+		<br/>
+		<br/>
+		<div ng-show="selectedFiles != null">
+			<div class="sel-file" ng-repeat="f in selectedFiles">
+				{{($index + 1) + '.'}}
+				<img ng-show="dataUrls[$index]" ng-src="{{dataUrls[$index]}}">
+				<button class="button" ng-click="start($index)" ng-show="progress[$index] < 0">Start</button>
+				<span class="progress" ng-show="progress[$index] >= 0">						
+					<div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
+				</span>				
+				<button class="button" ng-click="abort($index)" ng-show="hasUploader($index) && progress[$index] < 100">Abort</button>
+				{{f.name}} - size: {{f.size}}B - type: {{f.type}}
+			</div>
+		</div>
+		<p>
+			uploadResult = {{uploadResult}}
+			<!-- ng-show="uploadResult.length > 0 -->
+		</p>			
+	</div>	
+
+</div>
+
