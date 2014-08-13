@@ -6,7 +6,30 @@
     .css-form input.ng-valid.ng-dirty {
         background-color: #78FA89;
     }
+
+    .sel-file img {
+        float: left;
+        width: 38px;
+        height: 38px;
+        padding-right: 10px;
+    }
 </style>
+
+
+<script type="text/javascript">
+FileAPI = {
+    debug: true,
+    //forceLoad: true, html5: false //to debug flash in HTML5 browsers
+    //wrapInsideDiv: true, //experimental for fixing css issues
+    //only one of jsPath or jsUrl.
+    //jsPath: '/js/FileAPI.min.js/folder/', 
+    //jsUrl: 'yourcdn.com/js/FileAPI.min.js',
+
+    //only one of staticPath or flashUrl.
+    //staticPath: '/flash/FileAPI.flash.swf/folder/'
+    //flashUrl: 'yourcdn.com/js/FileAPI.flash.swf'
+};
+</script>
 
 <h3>::: Solicitacao - Form :::</h3>
 
@@ -18,16 +41,22 @@
             <p>                            
                 <input ng-model="solicitacao.estudante.nome" id="nome" type="text" required placeHolder="nome">
             </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.nomeExibicao" id="nomeExibicao" type="text" required placeHolder="nomeExibicao">
+            </p>
+
             <!-- ############ DATA NASCIMENTO ############## -->
             <p>
                 <input ng-model="solicitacao.estudante.dataNascimento" name="dataNascimento" id="dataNascimento" 
                        type="text"  
                        ui-date="dateOptions"                    
-                       required>                                           
+                       required 
+                       placeHolder="Data Nascimento">                                           
             </p>
 
             <p>                            
-                <input ng-model="solicitacao.estudante.cpf" id="cpf" type="text" required placeHolder="cpf">
+                <input ng-model="solicitacao.estudante.cpf" id="cpf" name="cpf" type="text" required placeHolder="cpf">
             </p>              
 
             <p>                            
@@ -52,19 +81,95 @@
                 <input ng-model="solicitacao.estudante.codigo_area_celular" id="codigo_area_celular" type="number" required placeHolder=""> 
                 <input ng-model="solicitacao.estudante.celular" id="celular" type="number" required placeHolder="somente numeros">
             </p>                
+            <hr>
+            <!-- ####################################       UPLOAD Arquivos     #################################### -->                                        
+            <input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="hidden" required>                          
+            <input ng-model="solicitacao.estudante.nomeArquivoDocumento" id="nomeArquivoDocumento" type="hidden" required>
+
+
+                <div ng-controller="UploadFotoController">
                 
-            <p>                            
-                <input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="text" required placeHolder="nomeArquivoFoto">
-            </p>
+        <div class="upload-div" style="width: 500px; background-color: #FA787E;">                   
+                <input type="file" id="fileFoto" name="fileFoto" accept="image/x-png, image/gif, image/jpeg" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid">              
+                                                                    
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>       
                 
-            <p>                            
-                <input ng-model="solicitacao.estudante.nomeArquivoDocumento" id="nomeArquivoDocumento" type="text" required placeHolder="nomeArquivoDocumento">
-            </p>
+                <div ng-show="selectedFiles != null">           
+                    <div class="sel-file" ng-repeat="f in selectedFiles">
+                        <table border="2">
+                            <tr>
+                                <td>{{f.name}}</td>                         
+                                <td style="width: 40%">
+                                    <progressbar animate="false" value="progress[$index]" type="success">
+                                        <b>{{progress[$index]}}%</b>
+                                    </progressbar>
+                                </td>
+                                <td><button ng-click="remove($index)">X</button></td>                       
+                            </tr>
+                        </table>
+                                                                                                    
+                    <div ng-show="progress[$index] < 100 ">                 
+                        <p>
+                            <button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+                                Start
+                            </button>
+                            -       
+                            <button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+                            ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+                                Abort                               
+                            </button>
+                        </p>            
+                   </div>                                               
+
+                    </div>
+                </div>                                                          
+        </div>  
+    </div>
+
+    <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXX -->
+    <br><br>
+
+    <div ng-controller="DocumentoUploadController">     
                 
-            <p>                            
-                <input ng-model="solicitacao.estudante.nomeExibicao" id="nomeExibicao" type="text" required placeHolder="nomeExibicao">
-            </p>
+        <div class="upload-div" style="width: 500px; background-color: #A9E2F3;">                   
+                <input type="file" id="fileDocumento" name="fileDocumento" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid">                
+                                                                    
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>       
                 
+                <div ng-show="selectedFiles != null">           
+                    <div class="sel-file" ng-repeat="f in selectedFiles">
+                        <table border="2">
+                            <tr>
+                                <td>{{f.name}}</td>                         
+                                <td style="width: 40%">
+                                    <progressbar animate="false" value="progress[$index]" type="success">
+                                        <b>{{progress[$index]}}%</b>
+                                    </progressbar>
+                                </td>
+                                <td><button ng-click="remove($index)">X</button></td>                       
+                            </tr>
+                        </table>
+                                                                                                    
+                    <div ng-show="progress[$index] < 100 ">                 
+                        <p>
+                            <button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+                                Start
+                            </button>
+                            -       
+                            <button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+                            ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+                                Abort                               
+                            </button>
+                        </p>            
+                   </div>                                               
+
+                    </div>
+                </div>                                                          
+            </div>  
+        </div>
+
+         <!--FIM UPLOAD Arquivos ################################################################################### -->
+                            
             <p><hr></p>
             <p>                            
                 <input ng-model="solicitacao.estudante.cep" id="cep" type="number" required placeHolder="">
