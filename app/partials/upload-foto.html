@@ -27,47 +27,97 @@ FileAPI = {
 };
 </script>
 
-<h3>::: UploadFotoController :::</h3>
+<h4>::: UploadFotoController :::</h4>
 
-<div ng-controller="UploadFotoController">
+<form name="formUpload">
 
-	myModel: <input type="text" ng-model="myModel">
-	<hr>
-	
-	<div class="upload-div" style="width: 500px; background-color: #FA787E;">					
-			<input type="file" id="fileFoto" name="fileFoto" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="myModel == null">				
-						       									
-			<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>		
-			
-			<div ng-show="selectedFiles != null">			
-				<div class="sel-file" ng-repeat="f in selectedFiles">
-					<table border="2">
-						<tr>
-							<td>{{f.name}}</td>							
-							<td style="width: 40%">
-								<progressbar animate="false" value="progress[$index]" type="success">
-									<b>{{progress[$index]}}%</b>
-								</progressbar>
-							</td>
-							<td><button ng-click="remove($index)">X</button></td>						
-						</tr>
-					</table>
-																								
-				<div ng-show="progress[$index] < 100 ">					
-					<p>
-						<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
-							Start
-						</button>
-						-		
-						<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
-						ng-disabled="!hasUploader($index) || progress[$index] >= 100">
-							Abort								
-						</button>
-					</p>			
-			   </div>												
+	CPF: <input type="text" name="myModelNAME" ng-model="myModel" ng-required="true">
 
-				</div>
-			</div>															
-	</div>	
-</div>
+
+<p>XXXXXXXXXX	FORA DOs Controllers </p>
+
+
+	<div ng-controller="UploadFotoController">
+				
+		<div class="upload-div" style="width: 500px; background-color: #FA787E;">					
+				<input type="file" id="fileFoto" name="fileFoto" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formUpload.myModelNAME.$valid">				
+							       									
+				<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>		
+				
+				<div ng-show="selectedFiles != null">			
+					<div class="sel-file" ng-repeat="f in selectedFiles">
+						<table border="2">
+							<tr>
+								<td>{{f.name}}</td>							
+								<td style="width: 40%">
+									<progressbar animate="false" value="progress[$index]" type="success">
+										<b>{{progress[$index]}}%</b>
+									</progressbar>
+								</td>
+								<td><button ng-click="remove($index)">X</button></td>						
+							</tr>
+						</table>
+																									
+					<div ng-show="progress[$index] < 100 ">					
+						<p>
+							<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+								Start
+							</button>
+							-		
+							<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+							ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+								Abort								
+							</button>
+						</p>			
+				   </div>												
+
+					</div>
+				</div>															
+		</div>	
+	</div>
+
+	<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXX -->
+	<br><br>
+
+	<div ng-controller="DocumentoUploadController">		
+				
+		<div class="upload-div" style="width: 500px; background-color: #A9E2F3;">					
+				<input type="file" id="fileDocumento" name="fileDocumento" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formUpload.myModelNAME.$valid">				
+							       									
+				<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>		
+				
+				<div ng-show="selectedFiles != null">			
+					<div class="sel-file" ng-repeat="f in selectedFiles">
+						<table border="2">
+							<tr>
+								<td>{{f.name}}</td>							
+								<td style="width: 40%">
+									<progressbar animate="false" value="progress[$index]" type="success">
+										<b>{{progress[$index]}}%</b>
+									</progressbar>
+								</td>
+								<td><button ng-click="remove($index)">X</button></td>						
+							</tr>
+						</table>
+																									
+					<div ng-show="progress[$index] < 100 ">					
+						<p>
+							<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+								Start
+							</button>
+							-		
+							<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+							ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+								Abort								
+							</button>
+						</p>			
+				   </div>												
+
+					</div>
+				</div>															
+		</div>	
+	</div>
+
+</form>	
+
 
