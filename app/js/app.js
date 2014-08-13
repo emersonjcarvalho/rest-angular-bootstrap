@@ -3,7 +3,7 @@
 var appDependencies = [ 
   'ngRoute',
   'ngResource',  
-  //'ui.bootstrap',
+  'ui.bootstrap',
   'ui.date',
   'angularFileUpload',
   'crudApp.filters',

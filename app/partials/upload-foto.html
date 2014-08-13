@@ -1,5 +1,17 @@
 
 <link type="text/css" rel="stylesheet" href="common.css">
+
+<style>
+
+.sel-file img {
+	float: left;
+	width: 38px;
+	height: 38px;
+	padding-right: 10px;
+}
+
+</style>
+
 <script type="text/javascript">
 FileAPI = {
 	debug: true,
@@ -18,42 +30,44 @@ FileAPI = {
 <h3>::: UploadFotoController :::</h3>
 
 <div ng-controller="UploadFotoController">
+
+	myModel: <input type="text" ng-model="myModel">
+	<hr>
 	
-		<div class="upload-div">
-		  <p>
-			<b>uploadUrl: </b> {{uploadUrl}}
-		  </p>
+	<div class="upload-div" style="width: 500px; background-color: #FA787E;">					
+			<input type="file" id="fileFoto" name="fileFoto" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="myModel == null">				
+						       									
+			<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>		
+			
+			<div ng-show="selectedFiles != null">			
+				<div class="sel-file" ng-repeat="f in selectedFiles">
+					<table border="2">
+						<tr>
+							<td>{{f.name}}</td>							
+							<td style="width: 40%">
+								<progressbar animate="false" value="progress[$index]" type="success">
+									<b>{{progress[$index]}}%</b>
+								</progressbar>
+							</td>
+							<td><button ng-click="remove($index)">X</button></td>						
+						</tr>
+					</table>
+																								
+				<div ng-show="progress[$index] < 100 ">					
+					<p>
+						<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+							Start
+						</button>
+						-		
+						<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+						ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+							Abort								
+						</button>
+					</p>			
+			   </div>												
 
-  myModel: <input type="text" ng-model="myModel"> model object to be sent with the file.<br/>
-		<hr>
-		
-		<div class="upload-buttons">
-			FOTO: <input type="file" ng-file-select="onFileSelect($files)" onclick="this.value=null">
-			<br/>
-		</div>
-		       							
-		<div class="err" ng-show="errorMsg != null">{{errorMsg}}</div>
-		<br/>
-		Progress:
-		<br/>
-		<br/>
-		<div ng-show="selectedFiles != null">
-			<div class="sel-file" ng-repeat="f in selectedFiles">
-				{{($index + 1) + '.'}}
-				<img ng-show="dataUrls[$index]" ng-src="{{dataUrls[$index]}}">
-				<button class="button" ng-click="start($index)" ng-show="progress[$index] < 0">Start</button>
-				<span class="progress" ng-show="progress[$index] >= 0">						
-					<div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
-				</span>				
-				<button class="button" ng-click="abort($index)" ng-show="hasUploader($index) && progress[$index] < 100">Abort</button>
-				{{f.name}} - size: {{f.size}}B - type: {{f.type}}
-			</div>
-		</div>
-		<p>
-			uploadResult = {{uploadResult}}
-			<!-- ng-show="uploadResult.length > 0 -->
-		</p>			
+				</div>
+			</div>															
 	</div>	
-
 </div>
 

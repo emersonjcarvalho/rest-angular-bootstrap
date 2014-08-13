@@ -127,22 +127,34 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
 
 crudApp.controller('UploadFotoController', ['$scope', '$http', '$timeout', '$upload', function($scope, $http, $timeout, $upload){
 
-var uploadUrl = 'http://localhost:9000/upload/foto/'; 
+  function sendAlert(){
+    alert('<<<< sendAlert >>>>');
+  }
+
+// ALERTS (Array and Actions) $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
+  $scope.alerts = [
+    //{ type: 'success', msg: '... ngs up and try submitting again.' },    
+  ];
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
+
+var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/'; 
 var KEY_MULTIPARTI_FILE_UPLOAD_FOTO = 'fotoFile';
 var HTTP_METHOD = 'POST';
+var MSG_ERRO_TAMANHO = 'Imagem tamanha máximo de 100KB'
+var MSG_FOTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
+
 //Multupart/form-data ou File binary
 var howToSend = 1;
 
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-  $scope.uploadUrl = uploadUrl;
-
+  
   $scope.usingFlash = FileAPI && FileAPI.upload != null;
   $scope.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
-  $scope.uploadRightAway = false;
-  
-    
+
   $scope.hasUploader = function(index) {
     return $scope.upload[index] != null;
   };
@@ -152,51 +164,77 @@ var howToSend = 1;
     $scope.upload[index] = null;
   };
 
+  $scope.remove = function(index){
+    document.getElementById("fileFoto").value ='';  
+    $scope.selectedFiles = [];
+    $scope.progress = [];
+    $scope.errorMsg = null;
+    $scope.upload[index] = null;
+
+    $scope.alerts.splice(index, 1);
+
+  }
+
+ // onFileSelect ###############################################################################  
   $scope.onFileSelect = function($files) {
     $scope.selectedFiles = [];
     $scope.progress = [];
-    if ($scope.upload && $scope.upload.length > 0) {
-      for (var i = 0; i < $scope.upload.length; i++) {
-        if ($scope.upload[i] != null) {
-          $scope.upload[i].abort();
+    $scope.errorMsg = null;
+
+    var uByte = 1;
+    var uKB = uByte * 1024;
+    var uMB = uKB * 1024;
+
+    var fSize = $files[0].size;
+    
+    if(fSize >= uMB){  
+        $scope.errorMsg = MSG_ERRO_TAMANHO;
+        $scope.alerts.push({ type: 'danger', msg: $scope.errorMsg }); 
+        document.getElementById("fileFoto").value ='';      
+    }else{
+
+      if ($scope.upload && $scope.upload.length > 0) {
+        for (var i = 0; i < $scope.upload.length; i++) {
+          if ($scope.upload[i] != null) {
+            $scope.upload[i].abort();
+          }
         }
       }
-    }
-    $scope.upload = [];
-    $scope.uploadResult = [];
-    $scope.selectedFiles = $files;
-    $scope.dataUrls = [];
-    for ( var i = 0; i < $files.length; i++) {
-      var $file = $files[i];
-      if ($scope.fileReaderSupported && $file.type.indexOf('image') > -1) {
-        var fileReader = new FileReader();
-        fileReader.readAsDataURL($files[i]);
-        var loadFile = function(fileReader, index) {
-          fileReader.onload = function(e) {
-            $timeout(function() {
-              $scope.dataUrls[index] = e.target.result;
-            });
-          }
-        }(fileReader, i);
-      }
-      $scope.progress[i] = -1;
 
-      //Quando marcado, Ao selecionar um arquivo, Inicia AUTOMATICAMENTE a transferencia
-      if ($scope.uploadRightAway) {
-        $scope.start(i);
+      $scope.upload = [];
+      $scope.uploadResult = [];
+      $scope.selectedFiles = $files;
+      $scope.dataUrls = [];
+
+      $scope.codigoResult = [];
+
+      for ( var i = 0; i < $files.length; i++) {
+        var $file = $files[i];
+        if ($scope.fileReaderSupported && $file.type.indexOf('image') > -1) {
+          var fileReader = new FileReader();
+          fileReader.readAsDataURL($files[i]);
+          var loadFile = function(fileReader, index) {
+            fileReader.onload = function(e) {
+              $timeout(function() {
+                $scope.dataUrls[index] = e.target.result;
+              });
+            }
+          }(fileReader, i);
+        }
+        $scope.progress[i] = -1;
       }
     }
+
   };
   
+// START ###############################################################################
   $scope.start = function(index) {
     $scope.progress[index] = 0;
     $scope.errorMsg = null;
 
-    var urlUploadWithCPF = uploadUrl + $scope.myModel;
-
-    $scope.uploadUrl = urlUploadWithCPF;
-
-    if (howToSend == 1) {  //if ($scope.howToSend == 1) {
+    var urlUploadWithCPF = URL_BASE_SERVER_UPLOAD + $scope.myModel;
+    
+    if (howToSend == 1) {  
       $scope.upload[index] = $upload.upload({
         url: urlUploadWithCPF,
         method: HTTP_METHOD, //$scope.httpMethod,
@@ -205,28 +243,32 @@ var howToSend = 1;
           myModel : $scope.myModel
         },
 
-        /* formDataAppender: function(fd, key, val) {
-          if (angular.isArray(val)) {
-                        angular.forEach(val, function(v) {
-                          fd.append(key, v);
-                        });
-                      } else {
-                        fd.append(key, val);
-                      }
-        }, */
-        /* transformRequest: [function(val, h) {
-          console.log(val, h('my-header')); return val + '-modified';
-        }], */
-
         file: $scope.selectedFiles[index],
-                
-        //fileFormDataName: 'fotoFile'                  
+                                    
         fileFormDataName: KEY_MULTIPARTI_FILE_UPLOAD_FOTO
         
       });
+
       $scope.upload[index].then(function(response) {
         $timeout(function() {
           $scope.uploadResult.push(response.data);
+          $scope.codigoResult.push(response.status);
+
+
+           //APRESENTADO RESPOSTA DO SERVIDOR(CAREGADO ou NAO com sucesso) 
+          if($scope.codigoResult[0] == '200'){
+              console.log('$scope.codigoResult: ' + $scope.codigoResult);
+
+              $scope.alerts.push({ type: 'success', msg: MSG_FOTO_UPLOAD_SUCESSO }); 
+          }else{
+              console.log('$scope.codigoResult: ' + $scope.codigoResult);
+              console.log('$scope.uploadResult.erroMessage: ' + $scope.uploadResult.erroMessage);
+
+              $scope.errorMsg = $scope.uploadResult.erroMessage;
+              var msgErroResultAux =  $scope.codigoResult + ' - ' + $scope.errorMsg;
+              $scope.alerts.push({ type: 'danger', msg: msgErroResultAux }); 
+          }
+
         });
       }, function(response) {
         if (response.status > 0) $scope.errorMsg = response.status + ': ' + response.data;
@@ -238,16 +280,19 @@ var howToSend = 1;
 //        xhr.upload.addEventListener('abort', function() {console.log('abort complete')}, false);
       });
 
+     
+
     //FILE BINARY OPTION
     } else {
       var fileReader = new FileReader();
             fileReader.onload = function(e) {
             $scope.upload[index] = $upload.http({
-              url: uploadUrl,
+              url: URL_BASE_SERVER_UPLOAD,
           headers: {'Content-Type': $scope.selectedFiles[index].type},
           data: e.target.result
             }).then(function(response) {
           $scope.uploadResult.push(response.data);
+          $scope.codigoResult.push(response.status);
         }, function(response) {
           if (response.status > 0) $scope.errorMsg = response.status + ': ' + response.data;
         }, function(evt) {
@@ -257,8 +302,10 @@ var howToSend = 1;
             }
           fileReader.readAsArrayBuffer($scope.selectedFiles[index]);
     }
+
   };
-  
+
+  //###############################################################################
   $scope.dragOverClass = function($event) {
     var items = $event.dataTransfer.items;
     var hasFile = false;
