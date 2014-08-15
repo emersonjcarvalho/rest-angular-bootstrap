@@ -29,4 +29,4 @@ var crudApp =  angular.module('crudApp.directives', []);
         }
     };
 });
-
+  

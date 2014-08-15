@@ -5,6 +5,7 @@ var appDependencies = [
   'ngResource',  
   'ui.bootstrap',
   'ui.date',
+  'ngCpfCnpj',
   'angularFileUpload',
   'crudApp.filters',
   'crudApp.services',

@@ -76,15 +76,7 @@ crudApp.controller('CreateController', ['$scope','UserPojo', 'CampusRest', funct
 
 	//$scope.helloController = true; 
 	//$scope.OnOff = function(){$scope.helloController = !$scope.helloController;};
-
-
-  $scope.colors = [
-      {name:'black', shade:'dark'},
-      {name:'white', shade:'light'},
-      {name:'red', shade:'dark'},
-      {name:'blue', shade:'dark'},
-      {name:'yellow', shade:'light'}
-    ];      
+    
 
     $scope.campusList = CampusRest.query();
 
@@ -97,8 +89,7 @@ crudApp.controller('CreateController', ['$scope','UserPojo', 'CampusRest', funct
 
 crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 'EstadoRest', 'SolicitacaoRest', function($scope, UserPojo, CampusRest, EstadoRest, SolicitacaoRest){
 
-  //$scope.helloController = true; 
-  //$scope.OnOff = function(){$scope.helloController = !$scope.helloController;};
+  $scope.regexSomenteNumeros =  /^[0-9]+$/;
 
     // datepicker options (ui-date)
     $scope.dateOptions = {
@@ -144,13 +135,14 @@ crudApp.controller('UploadFotoController', ['$scope', '$http', '$timeout', '$upl
 var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/'; 
 var KEY_MULTIPARTI_FILE_UPLOAD_FOTO = 'fotoFile';
 var HTTP_METHOD = 'POST';
-var MSG_ERRO_TAMANHO = 'Imagem tamanha máximo de 100KB'
+var MSG_ERRO_TAMANHO_FOTO = 'Imagem tamanha máximo de 100KB'
+var MSG_ERRO_TIPO_FOTO = ' é tipo não permitido p/ Foto.'
 var MSG_FOTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
 
 var uByte = 1;
 var uKB = uByte * 1024;
-var uMB = uKB * 1024;
-var TAM_FOTO_ACCEPT = uMB * 500;
+//var uMB = uKB * 1024;
+var TAM_FOTO_ACCEPT = uKB * 100; //var TAM_FOTO_ACCEPT = uMB * 500;
 
 
 //Multupart/form-data ou File binary
@@ -188,12 +180,39 @@ var howToSend = 1;
     $scope.errorMsg = null;
 
     var fSize = $files[0].size;
-    
-    if(fSize > TAM_FOTO_ACCEPT){  
-        $scope.errorMsg = MSG_ERRO_TAMANHO;
+    var fType = $files[0].type;
+
+    var flagFileValido = true;
+    var fTypeInvalido = '';
+          
+// VERIFICA FILE VELIDO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     if(fSize > TAM_FOTO_ACCEPT){  
+        flagFileValido = false;
+
+        $scope.errorMsg = MSG_ERRO_TAMANHO_FOTO;
         $scope.alerts.push({ type: 'danger', msg: $scope.errorMsg }); 
-        document.getElementById("fileFoto").value ='';      
-    }else{
+        document.getElementById("fileFoto").value ='';          
+      }
+
+      var tipoFotoAceito = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp']; 
+
+      var flagExisteTipo = $.inArray(fType, tipoFotoAceito);
+
+      if(flagExisteTipo == -1){
+
+        flagFileValido = false;
+        fTypeInvalido = fType; 
+      }
+
+      if(!flagFileValido && fTypeInvalido != ''){
+          $scope.errorMsg = fType +  MSG_ERRO_TIPO_FOTO;
+          $scope.alerts.push({ type: 'danger', msg: $scope.errorMsg }); 
+          document.getElementById("fileFoto").value ='';     
+      }
+
+// FIM VERIFICA FILE VELIDO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      
+    
+    if(flagFileValido){
 
       if ($scope.upload && $scope.upload.length > 0) {
         for (var i = 0; i < $scope.upload.length; i++) {
@@ -234,7 +253,7 @@ var howToSend = 1;
     $scope.progress[index] = 0;
     $scope.errorMsg = null;
 
-    var urlUploadWithCPF = URL_BASE_SERVER_UPLOAD + $scope.myModel;
+    var urlUploadWithCPF = URL_BASE_SERVER_UPLOAD + $scope.solicitacao.estudante.cpf;
     
     if (howToSend == 1) {  
       $scope.upload[index] = $upload.upload({
@@ -242,7 +261,7 @@ var howToSend = 1;
         method: HTTP_METHOD, //$scope.httpMethod,
         //headers: {'my-header': 'my-header-value'},
         data : {
-          myModel : $scope.myModel
+          myModel : $scope.solicitacao.estudante.cpf
         },
 
         file: $scope.selectedFiles[index],
@@ -252,14 +271,14 @@ var howToSend = 1;
       });
 
       $scope.upload[index].then(function(response) {
-        $timeout(function() {
-          $scope.uploadResult.push(response.data);
+        $timeout(function() {                  
+          $scope.uploadResult.push(response.data.nomeFileFotoCache);
           $scope.codigoResult.push(response.status);
-
-
+          
            //APRESENTADO RESPOSTA DO SERVIDOR(CAREGADO ou NAO com sucesso) 
           if($scope.codigoResult[0] == '200'){
-              console.log('$scope.codigoResult: ' + $scope.codigoResult);
+
+              $scope.solicitacao.estudante.nomeArquivoFoto =  $scope.uploadResult;
 
               $scope.alerts.push({ type: 'success', msg: MSG_FOTO_UPLOAD_SUCESSO }); 
           }else{
@@ -348,8 +367,10 @@ crudApp.controller('DocumentoUploadController', ['$scope', '$http', '$timeout', 
 var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/'; 
 var KEY_MULTIPARTI_FILE_UPLOAD_FOTO = 'fotoFile';
 var HTTP_METHOD = 'POST';
-var MSG_ERRO_TAMANHO = 'Documento tamanho máximo de 1MB'
+var MSG_ERRO_TAMANHO_DOCUMENTO = 'Documento tamanho máximo de 1MB';
+var MSG_ERRO_TIPO_DOCUMENTO = 'é um Tipo não valido';
 var MSG_FOTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
+var MSG_DOCUMENTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
 
 var uByte = 1;
 var uKB = uByte * 1024;
@@ -391,12 +412,39 @@ var howToSend = 1;
     $scope.errorMsg = null;
   
     var fSize = $files[0].size;
-    
-    if(fSize > TAM_DOCUMENTO_ACCEPT){  
-        $scope.errorMsg = MSG_ERRO_TAMANHO;
+    var fType = $files[0].type;
+
+    var flagFileValido = true;
+    var fTypeInvalido = '';
+
+// VERIFICA FILE VELIDO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     if(fSize > TAM_DOCUMENTO_ACCEPT){  
+        flagFileValido = false;
+
+        $scope.errorMsg = MSG_ERRO_TAMANHO_DOCUMENTO;
         $scope.alerts.push({ type: 'danger', msg: $scope.errorMsg }); 
-        document.getElementById("fileDocumento").value ='';      
-    }else{
+        document.getElementById("fileDocumento").value ='';          
+      }
+
+      var tipoDocumentoAceito = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; 
+
+      var flagExisteTipo = $.inArray(fType, tipoDocumentoAceito);
+
+      if(flagExisteTipo == -1){
+
+        flagFileValido = false;
+        fTypeInvalido = fType; 
+      }
+
+      if(!flagFileValido && fTypeInvalido != ''){
+          $scope.errorMsg = fType +  MSG_ERRO_TIPO_DOCUMENTO;
+          $scope.alerts.push({ type: 'danger', msg: $scope.errorMsg }); 
+          document.getElementById("fileDocumento").value ='';     
+      }
+
+// FIM VERIFICA FILE VELIDO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      
+    
+    if(flagFileValido){
 
       if ($scope.upload && $scope.upload.length > 0) {
         for (var i = 0; i < $scope.upload.length; i++) {
@@ -437,7 +485,7 @@ var howToSend = 1;
     $scope.progress[index] = 0;
     $scope.errorMsg = null;
 
-    var urlUploadWithCPF = URL_BASE_SERVER_UPLOAD + $scope.myModel;
+    var urlUploadWithCPF = URL_BASE_SERVER_UPLOAD + $scope.solicitacao.estudante.cpf;
     
     if (howToSend == 1) {  
       $scope.upload[index] = $upload.upload({
@@ -445,7 +493,7 @@ var howToSend = 1;
         method: HTTP_METHOD, //$scope.httpMethod,
         //headers: {'my-header': 'my-header-value'},
         data : {
-          myModel : $scope.myModel
+          myModel : $scope.solicitacao.estudante.cpf
         },
 
         file: $scope.selectedFiles[index],
@@ -456,14 +504,13 @@ var howToSend = 1;
 
       $scope.upload[index].then(function(response) {
         $timeout(function() {
-          $scope.uploadResult.push(response.data);
+          $scope.uploadResult.push(response.data.nomeFileDocumentoCache);
           $scope.codigoResult.push(response.status);
 
 
            //APRESENTADO RESPOSTA DO SERVIDOR(CAREGADO ou NAO com sucesso) 
-          if($scope.codigoResult[0] == '200'){
-              console.log('$scope.codigoResult: ' + $scope.codigoResult);
-
+          if($scope.codigoResult[0] == '200'){              
+              $scope.solicitacao.estudante.nomeArquivoFoto = $scope.uploadResult; 
               $scope.alerts.push({ type: 'success', msg: MSG_FOTO_UPLOAD_SUCESSO }); 
           }else{
               console.log('$scope.codigoResult: ' + $scope.codigoResult);

@@ -1,0 +1,28 @@
+
+<!-- saved from url=(0067)https://raw.githubusercontent.com/gil/ng-cpf-cnpj/master/bower.json -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>window["_GOOG_TRANS_EXT_VER"] = "1";</script><style type="text/css"></style><style type="text/css"></style></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">{
+  "name": "ng-cpf-cnpj",
+  "version": "0.0.1",
+  "authors": [
+    "André Gil &lt;hey@andregil.net&gt;"
+  ],
+  "homepage": "https://github.com/gil/ng-cpf-cnpj",
+  "main": "./lib/ngCpfCnpj.js",
+  "description": "AngularJS directive to validate CPF/CNPJ numbers.",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "cpf_cnpj": "~0.0.3"
+  },
+  "devDependencies": {
+    "angular": "~1.2.0",
+    "angular-ui-utils": "~0.0.4"
+  }
+}
+</pre></body></html>

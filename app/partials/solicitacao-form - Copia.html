@@ -1,0 +1,250 @@
+<style type="text/css">
+    .css-form input.ng-invalid.ng-dirty {
+        background-color: #FA787E;
+    }
+
+    .css-form input.ng-valid.ng-dirty {
+        background-color: #78FA89;
+    }
+
+    .sel-file img {
+        float: left;
+        width: 38px;
+        height: 38px;
+        padding-right: 10px;
+    }
+</style>
+
+
+<script type="text/javascript">
+FileAPI = {
+    debug: true,
+    //forceLoad: true, html5: false //to debug flash in HTML5 browsers
+    //wrapInsideDiv: true, //experimental for fixing css issues
+    //only one of jsPath or jsUrl.
+    //jsPath: '/js/FileAPI.min.js/folder/', 
+    //jsUrl: 'yourcdn.com/js/FileAPI.min.js',
+
+    //only one of staticPath or flashUrl.
+    //staticPath: '/flash/FileAPI.flash.swf/folder/'
+    //flashUrl: 'yourcdn.com/js/FileAPI.flash.swf'
+};
+</script>
+
+<h3>::: Solicitacao - Form :::</h3>
+
+<div ng-controller="SolicitacaoController">            
+    <form  name="formSolicitacao" novalidate="novalidate" class="css-form">
+        <fieldset style="background: #F6CEE3">
+            <legend>Dados Pessoais</legend>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.nome" id="nome" type="text" required placeHolder="nome">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.nomeExibicao" id="nomeExibicao" type="text" required placeHolder="nomeExibicao">
+            </p>
+
+            <!-- ############ DATA NASCIMENTO ############## -->
+            <p>
+                <input ng-model="solicitacao.estudante.dataNascimento" name="dataNascimento" id="dataNascimento" 
+                       type="text"  
+                       ui-date="dateOptions"                    
+                       required 
+                       placeHolder="Data Nascimento">                                           
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.cpf" id="cpf" name="cpf" type="text" required placeHolder="cpf">
+            </p>              
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.rg" id="rg" type="text" required placeHolder="rg">
+            </p>                
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.email" id="email" type="email" required placeHolder="email">
+            </p>                
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.sexo" value="M" id="sexoM" type="radio" required >Masculno
+                <input ng-model="solicitacao.estudante.sexo" value="F" id="sexoF" type="radio" >Feminino
+            </p>                
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.codigo_area_telefone" id="codigo_area_telefone" type="number" required placeHolder=""> 
+                <input ng-model="solicitacao.estudante.telefone" id="telefone" type="number" required placeHolder="somente numeros">
+            </p>
+                
+            <p>                            
+                <input ng-model="solicitacao.estudante.codigo_area_celular" id="codigo_area_celular" type="number" required placeHolder=""> 
+                <input ng-model="solicitacao.estudante.celular" id="celular" type="number" required placeHolder="somente numeros">
+            </p>                
+            <hr>
+            <!-- ####################################       UPLOAD Arquivos     #################################### -->                                        
+            <input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="hidden" required>                          
+            <input ng-model="solicitacao.estudante.nomeArquivoDocumento" id="nomeArquivoDocumento" type="hidden" required>
+
+
+                <div ng-controller="UploadFotoController">
+                
+        <div class="upload-div" style="width: 500px; background-color: #FA787E;">                   
+                <input type="file" id="fileFoto" name="fileFoto" accept="image/x-png, image/gif, image/jpeg" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid">              
+                                                                    
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>       
+                
+                <div ng-show="selectedFiles != null">           
+                    <div class="sel-file" ng-repeat="f in selectedFiles">
+                        <table border="2">
+                            <tr>
+                                <td>{{f.name}}</td>                         
+                                <td style="width: 40%">
+                                    <progressbar animate="false" value="progress[$index]" type="success">
+                                        <b>{{progress[$index]}}%</b>
+                                    </progressbar>
+                                </td>
+                                <td><button ng-click="remove($index)">X</button></td>                       
+                            </tr>
+                        </table>
+                                                                                                    
+                    <div ng-show="progress[$index] < 100 ">                 
+                        <p>
+                            <button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+                                Start
+                            </button>
+                            -       
+                            <button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+                            ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+                                Abort                               
+                            </button>
+                        </p>            
+                   </div>                                               
+
+                    </div>
+                </div>                                                          
+        </div>  
+    </div>
+
+    <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXX -->
+    <br><br>
+
+    <div ng-controller="DocumentoUploadController">     
+                
+        <div class="upload-div" style="width: 500px; background-color: #A9E2F3;">                   
+                <input type="file" id="fileDocumento" name="fileDocumento" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid">                
+                                                                    
+                <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>       
+                
+                <div ng-show="selectedFiles != null">           
+                    <div class="sel-file" ng-repeat="f in selectedFiles">
+                        <table border="2">
+                            <tr>
+                                <td>{{f.name}}</td>                         
+                                <td style="width: 40%">
+                                    <progressbar animate="false" value="progress[$index]" type="success">
+                                        <b>{{progress[$index]}}%</b>
+                                    </progressbar>
+                                </td>
+                                <td><button ng-click="remove($index)">X</button></td>                       
+                            </tr>
+                        </table>
+                                                                                                    
+                    <div ng-show="progress[$index] < 100 ">                 
+                        <p>
+                            <button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+                                Start
+                            </button>
+                            -       
+                            <button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+                            ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+                                Abort                               
+                            </button>
+                        </p>            
+                   </div>                                               
+
+                    </div>
+                </div>                                                          
+            </div>  
+        </div>
+
+         <!--FIM UPLOAD Arquivos ################################################################################### -->
+                            
+            <p><hr></p>
+            <p>                            
+                <input ng-model="solicitacao.estudante.cep" id="cep" type="number" required placeHolder="">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.logradouro" id="logradouro" type="text" required placeHolder="Endereço">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.numeroEndereco" id="numeroEndereco" type="text" required placeHolder="">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.complementoEndereco" id="complementoEndereco" type="text" required placeHolder="">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.bairro" id="bairro" type="text" required placeHolder="Bairro">
+            </p>
+
+            <p>               
+                <select ng-model="solicitacao.estudante.estado" ng-options="estado.descricao for estado in estadoList">
+                    <option value="">-- select ESTADO --</option>
+                </select>
+            </p>
+            
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.cidade" id="cidade" type="text" required placeHolder="Cidade">
+            </p>
+            
+        </fieldset>    
+
+        <fieldset style="background: #E0F2F7">
+            <legend>Dados Academicos</legend>  
+            <p>                            
+                <input readonly id="instituicao" type="text" placeHolder="UNIFACS">
+            </p>
+
+            <p>               
+                <select ng-model="solicitacao.estudante.campus" ng-options="campus.descricao for campus in campusList">
+                    <option value="">-- select CAMPUS --</option>
+                </select>
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.matricula" id="matricula" type="text" required placeHolder="Matricula">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.curso" id="curso" type="text" required placeHolder="Curso">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.cursoExibicao" id="cursoExibicao" type="text" required placeHolder="cursoExibicao">
+            </p>
+
+            <p>                            
+                <input ng-model="solicitacao.estudante.localEntrega" value="c" id="localEntrega" type="radio" checked disabled> Sede DCE(CPB)
+            </p>            
+        </fieldset>   
+
+
+        <fieldset style="background: #E0F2F7">
+            <legend>Contrato</legend>             
+            {{solicitacao}}
+        </fieldset>
+
+            <p>                            
+                <input ng-model="aceiteContratoTemp" id="aceiteContrato" type="checkbox" required >Aceite Contrato
+            </p>
+
+        <p>
+            <input ng-click="salvarUser()" type="button" value="Save" ng-disabled="formSolicitacao.$invalid">			
+        </p>
+    </form>	        
+</div>
