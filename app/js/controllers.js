@@ -135,14 +135,14 @@ crudApp.controller('UploadFotoController', ['$scope', '$http', '$timeout', '$upl
 var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/'; 
 var KEY_MULTIPARTI_FILE_UPLOAD_FOTO = 'fotoFile';
 var HTTP_METHOD = 'POST';
-var MSG_ERRO_TAMANHO_FOTO = 'Imagem tamanha máximo de 100KB'
+var MSG_ERRO_TAMANHO_FOTO = 'Imagem tamanha máximo de 300KB'
 var MSG_ERRO_TIPO_FOTO = ' é tipo não permitido p/ Foto.'
 var MSG_FOTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
 
 var uByte = 1;
 var uKB = uByte * 1024;
 //var uMB = uKB * 1024;
-var TAM_FOTO_ACCEPT = uKB * 100; //var TAM_FOTO_ACCEPT = uMB * 500;
+var TAM_FOTO_ACCEPT = uKB * 300; //var TAM_FOTO_ACCEPT = uMB * 500;
 
 
 //Multupart/form-data ou File binary
@@ -278,7 +278,7 @@ var howToSend = 1;
            //APRESENTADO RESPOSTA DO SERVIDOR(CAREGADO ou NAO com sucesso) 
           if($scope.codigoResult[0] == '200'){
 
-              $scope.solicitacao.estudante.nomeArquivoFoto =  $scope.uploadResult;
+              $scope.solicitacao.estudante.nomeArquivoFoto =  $scope.uploadResult[0];
 
               $scope.alerts.push({ type: 'success', msg: MSG_FOTO_UPLOAD_SUCESSO }); 
           }else{
@@ -350,10 +350,6 @@ var howToSend = 1;
 
 crudApp.controller('DocumentoUploadController', ['$scope', '$http', '$timeout', '$upload', function($scope, $http, $timeout, $upload){
 
-  function sendAlert(){
-    alert('<<<< sendAlert >>>>');
-  }
-
 // ALERTS (Array and Actions) $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
   $scope.alerts = [
     //{ type: 'success', msg: '... ngs up and try submitting again.' },    
@@ -368,7 +364,7 @@ var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/';
 var KEY_MULTIPARTI_FILE_UPLOAD_FOTO = 'fotoFile';
 var HTTP_METHOD = 'POST';
 var MSG_ERRO_TAMANHO_DOCUMENTO = 'Documento tamanho máximo de 1MB';
-var MSG_ERRO_TIPO_DOCUMENTO = 'é um Tipo não valido';
+var MSG_ERRO_TIPO_DOCUMENTO = ' é tipo não permitido p/ Documento.';
 var MSG_FOTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
 var MSG_DOCUMENTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
 
@@ -455,11 +451,11 @@ var howToSend = 1;
       }
 
       $scope.upload = [];
-      $scope.uploadResult = [];
+      $scope.uploadDocumentoResult = [];
       $scope.selectedFiles = $files;
       $scope.dataUrls = [];
 
-      $scope.codigoResult = [];
+      $scope.codigoDocumentoResult = [];
 
       for ( var i = 0; i < $files.length; i++) {
         var $file = $files[i];
@@ -504,20 +500,20 @@ var howToSend = 1;
 
       $scope.upload[index].then(function(response) {
         $timeout(function() {
-          $scope.uploadResult.push(response.data.nomeFileDocumentoCache);
-          $scope.codigoResult.push(response.status);
+          $scope.uploadDocumentoResult.push(response.data.nomeFileDocumentoCache);
+          $scope.codigoDocumentoResult.push(response.status);
 
 
            //APRESENTADO RESPOSTA DO SERVIDOR(CAREGADO ou NAO com sucesso) 
-          if($scope.codigoResult[0] == '200'){              
-              $scope.solicitacao.estudante.nomeArquivoFoto = $scope.uploadResult; 
+          if($scope.codigoDocumentoResult[0] == '200'){              
+              $scope.solicitacao.estudante.nomeArquivoDocumento = $scope.uploadDocumentoResult[0]; 
               $scope.alerts.push({ type: 'success', msg: MSG_FOTO_UPLOAD_SUCESSO }); 
           }else{
-              console.log('$scope.codigoResult: ' + $scope.codigoResult);
-              console.log('$scope.uploadResult.erroMessage: ' + $scope.uploadResult.erroMessage);
+              console.log('$scope.codigoDocumentoResult: ' + $scope.codigoDocumentoResult);
+              console.log('$scope.uploadDocumentoResult.erroMessage: ' + $scope.uploadDocumentoResult.erroMessage);
 
-              $scope.errorMsg = $scope.uploadResult.erroMessage;
-              var msgErroResultAux =  $scope.codigoResult + ' - ' + $scope.errorMsg;
+              $scope.errorMsg = $scope.uploadDocumentoResult.erroMessage;
+              var msgErroResultAux =  $scope.codigoDocumentoResult + ' - ' + $scope.errorMsg;
               $scope.alerts.push({ type: 'danger', msg: msgErroResultAux }); 
           }
 
@@ -543,8 +539,8 @@ var howToSend = 1;
           headers: {'Content-Type': $scope.selectedFiles[index].type},
           data: e.target.result
             }).then(function(response) {
-          $scope.uploadResult.push(response.data);
-          $scope.codigoResult.push(response.status);
+          $scope.uploadDocumentoResult.push(response.data);
+          $scope.codigoDocumentoResult.push(response.status);
         }, function(response) {
           if (response.status > 0) $scope.errorMsg = response.status + ': ' + response.data;
         }, function(evt) {

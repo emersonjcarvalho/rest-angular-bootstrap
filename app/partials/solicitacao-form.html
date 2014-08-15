@@ -49,7 +49,7 @@ FileAPI = {
 
 <div ng-controller="SolicitacaoController">            
     <form  name="formSolicitacao" novalidate="novalidate" role="form" class="form-horizontal css-form">
-		<div class="container">
+		<div class="container-fluid">
 		  <div class="row clearfix">
 			<div class="col-md-12 column">
 	<!-- D PESSOAIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           
@@ -67,7 +67,7 @@ FileAPI = {
 					</div>
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="dataNascimento">Data Nascimento</label></div>
+						<div class="col-md-3 column" draggable="true"><label for="dataNascimento">DT Nascimento</label></div>
 						<div class="col-md-9 column">
 						  <!-- ############ DATA NASCIMENTO ############## -->
 						  <input ng-model="solicitacao.estudante.dataNascimento" name="dataNascimento" id="dataNascimento" 
@@ -158,41 +158,50 @@ FileAPI = {
 						<div class="col-md-3 column" draggable="true"> <label for="fileFoto">Foto</label></div>
 						<div class="col-md-9 column">
 						  <!-- xixixixixixixi   UPLOAD FOTO  xixixixxixix -->
-						<div ng-controller="UploadFotoController">
-							<input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="hidden">                                          
-						  <div class="upload-div">                   
-							  <input type="file" id="fileFoto" name="fileFoto" accept="image/x-png, image/gif, image/jpeg" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">              														
-							  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>       							  
-							  <div ng-show="selectedFiles != null">           
-								<div class="sel-file" ng-repeat="f in selectedFiles">
-								  <table border="2">
-									<tr>
-									  <td>{{f.name}}</td>                         
-									  <td style="width: 40%">
-										<progressbar animate="false" value="progress[$index]" type="success">
-										  <b>{{progress[$index]}}%</b>
-										</progressbar>
-									  </td>
-									  <td><button ng-click="remove($index)">X</button></td>                       
-									</tr>
-								  </table>
-																		
-								<div ng-show="progress[$index] < 100 ">                 
-								  <p>
-									<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
-									  Start
-									</button>
-									-       
-									<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
-									ng-disabled="!hasUploader($index) || progress[$index] >= 100">
-									  Abort                               
-									</button>
-								  </p>            
-								 </div>                                               
 
+						<div ng-controller="UploadFotoController">
+							<input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="hidden">	>> {{solicitacao.estudante.nomeArquivoFoto}}                                          
+						                   
+							  <input type="file" id="fileFoto" name="fileFoto" accept="image/x-png, image/gif, image/jpeg" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">              														
+							  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+
+							<div class="container-fluid" ng-show="selectedFiles != null">           
+								<div class="sel-file" ng-repeat="f in selectedFiles">
+								  	
+								  <div class="row clearfix">
+								  		<div class="col-md-5 column">
+								  			{{f.name}}
+								  		</div>
+								  		<div class="col-md-5 column">
+								  			<progressbar animate="false" value="progress[$index]" type="success">
+										  		<b>{{progress[$index]}}%</b>
+											</progressbar>
+								  		</div>
+								  		<div class="col-md-2 column">
+								  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> X </button>
+								  		</div>
+								  </div> 
+
+								  <div ng-show="progress[$index] < 100 ">  	
+									  <div class="row clearfix">
+									  		<div class="col-md-3 column">
+									  			<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+									  			Start
+												</button>
+									  		</div>
+									  		<div class="col-md-3 column">
+									  			<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+													ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+										  		Abort                               
+												</button>
+									  		</div>							  		
+									  		<div class="col-md-6 column"></div>
+									  </div>
+								</div>    							  
 								</div>
-							  </div>                                                          
-						  </div>  
+							</div>	                                                       
+						  
 						</div>
 
 						  <!-- xixixixxixixxi FIM UPLOAD FOTO xxixixixixi -->
@@ -211,44 +220,52 @@ FileAPI = {
 						<div class="col-md-9 column">
 						<!-- xixixixxixixxi UPLOAD DOCUMENTO xxixixixixi -->
 						<div ng-controller="DocumentoUploadController">   
-							<input ng-model="solicitacao.estudante.nomeArquivoDocumento" name="nomeArquivoDocumento" id="nomeArquivoDocumento" type="hidden">                
-						  <div class="upload-div">                   
-								  
+							<input ng-model="solicitacao.estudante.nomeArquivoDocumento" name="nomeArquivoDocumento" id="nomeArquivoDocumento" type="hidden">     
+
+							>> {{solicitacao.estudante.nomeArquivoDocumento}}           
+
 								  <input type="file" id="fileDocumento" name="fileDocumento" 
 								  accept="application/pdf" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">                
 																					  
-								  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>       
-								  
-								  <div ng-show="selectedFiles != null">           
-									  <div class="sel-file" ng-repeat="f in selectedFiles">
-										  <table border="2">
-											  <tr>
-												  <td>{{f.name}}</td>                         
-												  <td style="width: 40%">
-													  <progressbar animate="false" value="progress[$index]" type="success">
-														  <b>{{progress[$index]}}%</b>
-													  </progressbar>
-												  </td>
-												  <td><button ng-click="remove($index)">X</button></td>                       
-											  </tr>
-										  </table>
-																													  
-									  <div ng-show="progress[$index] < 100 ">                 
-										  <p>
-											  <button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
-												  Start
-											  </button>
-											  -       
-											  <button class="btn btn-sm btn-primary" ng-click="abort($index)" 
-											  ng-disabled="!hasUploader($index) || progress[$index] >= 100">
-												  Abort                               
-											  </button>
-										  </p>            
-									 </div>                                               
+								  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>   
 
-									  </div>
-								  </div>                                                          
-							  </div>  
+
+								<div class="container-fluid" ng-show="selectedFiles != null">           
+									<div class="sel-file" ng-repeat="f in selectedFiles">
+									  	
+										  <div class="row clearfix">
+										  		<div class="col-md-5 column">
+										  			{{f.name}}
+										  		</div>
+										  		<div class="col-md-5 column">
+										  			<progressbar animate="false" value="progress[$index]" type="success">
+												  		<b>{{progress[$index]}}%</b>
+													</progressbar>
+										  		</div>
+										  		<div class="col-md-2 column">
+										  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> X </button>
+										  		</div>
+										  </div> 
+
+										  <div ng-show="progress[$index] < 100 ">  	
+											  <div class="row clearfix">
+											  		<div class="col-md-3 column">
+											  			<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+											  			Start
+														</button>
+											  		</div>
+											  		<div class="col-md-3 column">
+											  			<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+															ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+												  		Abort                               
+														</button>
+											  		</div>							  		
+											  		<div class="col-md-6 column"></div>
+											  </div>
+										</div>    							  
+									</div>
+								</div>    								  
+
 						  </div>
 						  <!-- xixixixxixixxi FIM UPLOAD DOCUMENTO xxixixixixi -->
 						</div>
