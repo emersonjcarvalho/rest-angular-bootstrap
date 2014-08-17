@@ -31,6 +31,34 @@
       Your [Browser] does not support JavaScript or is disabled. 
     </h3>
   </noscript>    
+  <!-- Ajax Loading Spinner $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
+<style>
+	  #loaderDiv {
+	   position: fixed;
+	   top: 0;
+	   right: 0;
+	   bottom: 0;
+	   left: 0;
+	   z-index: 1100;
+	   background-color: white;
+	   opacity: .6;
+	}
+
+	.ajax-loader {
+	   position: absolute;
+	   left: 50%;
+	   top: 50%;
+	   margin-left: -32px; /* -1 * image width / 2 */
+	   margin-top: -32px; /* -1 * image height / 2 */
+	   display: block;
+	}
+</style>	
+  
+  <div id="loaderDiv" loader>
+    <img src="img/ajax_loader.gif" class="ajax-loader"/>
+  </div>
+ <!-- FIM Ajax Loading Spinner $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->  
+  
   <div>
     <h5>Header of Template</h5>
     <ul class="menu">

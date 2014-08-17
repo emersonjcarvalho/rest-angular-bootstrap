@@ -28,6 +28,8 @@ crudApp.config(['$routeProvider','$sceDelegateProvider','$httpProvider', functio
 
   
   $routeProvider.otherwise({redirectTo: '/vw-list-user'});
+
+  $httpProvider.interceptors.push('httpInterceptor');
   
   
   //Coloca o dominio numa whitelist do Angular
