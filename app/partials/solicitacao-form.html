@@ -25,6 +25,14 @@
     .estilo-fones{
     	width: 100px;
     }
+
+    .estilo-area-upload{
+    	width: 100%;
+    	background-color: #6E6E6E; 
+    	color: #FFFFFF;
+
+    }
+
 </style>
 
 	
@@ -47,7 +55,12 @@ FileAPI = {
 
 <h3>::: Solicitacao - Form :::</h3>
 
-<div ng-controller="SolicitacaoController">            
+<div ng-controller="SolicitacaoController">
+	<div>
+		<alert ng-repeat="mResult in messagesResult" type="{{mResult.type}}" close="closeAlert($index)">{{mResult.msg}}</alert> 
+	</div>
+	
+
     <form  name="formSolicitacao" novalidate="novalidate" role="form" class="form-horizontal css-form">
 		<div class="container-fluid">
 		  <div class="row clearfix">
@@ -160,14 +173,14 @@ FileAPI = {
 						  <!-- xixixixixixixi   UPLOAD FOTO  xixixixxixix -->
 
 						<div ng-controller="UploadFotoController">
-							<input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="hidden">	>> {{solicitacao.estudante.nomeArquivoFoto}}                                          
+							<input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="hidden">	  <!--{{solicitacao.estudante.nomeArquivoFoto}} -->                                         
 						                   
 							  <input type="file" id="fileFoto" name="fileFoto" accept="image/x-png, image/gif, image/jpeg" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">              														
 							  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
 
 							<div class="container-fluid" ng-show="selectedFiles != null">           
-								<div class="sel-file" ng-repeat="f in selectedFiles">
+								<div class="sel-file estilo-area-upload" ng-repeat="f in selectedFiles">
 								  	
 								  <div class="row clearfix">
 								  		<div class="col-md-5 column">
@@ -222,17 +235,16 @@ FileAPI = {
 						<div ng-controller="DocumentoUploadController">   
 							<input ng-model="solicitacao.estudante.nomeArquivoDocumento" name="nomeArquivoDocumento" id="nomeArquivoDocumento" type="hidden">     
 
-							>> {{solicitacao.estudante.nomeArquivoDocumento}}           
+							<!-- >> {{solicitacao.estudante.nomeArquivoDocumento}} -->          
 
 								  <input type="file" id="fileDocumento" name="fileDocumento" 
-								  accept="application/pdf" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">                
+								  accept="{{tipoDocumentoAceito}}" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">                
 																					  
 								  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>   
 
 
 								<div class="container-fluid" ng-show="selectedFiles != null">           
-									<div class="sel-file" ng-repeat="f in selectedFiles">
-									  	
+									<div class="sel-file estilo-area-upload" ng-repeat="f in selectedFiles">									  	
 										  <div class="row clearfix">
 										  		<div class="col-md-5 column">
 										  			{{f.name}}
@@ -262,8 +274,8 @@ FileAPI = {
 											  		</div>							  		
 											  		<div class="col-md-6 column"></div>
 											  </div>
-										</div>    							  
-									</div>
+										</div> 
+									</div>											
 								</div>    								  
 
 						  </div>
@@ -349,7 +361,7 @@ FileAPI = {
 						<div class="col-md-3 column" draggable="true"><label for="estado">Estado</label></div>
 						<div class="col-md-9 column">
 							<select ng-model="solicitacao.estudante.estado" ng-options="estado.descricao for estado in estadoList" id="estado" class="form-control">
-							  <option value="">-- select ESTADO --</option>
+							  <option value="">-- Selecione Estados --</option>
 							</select>
 						</div>
 					  </div>
@@ -387,7 +399,7 @@ FileAPI = {
 						<div class="col-md-3 column" draggable="true"><label for="campus">Campus</label></div>
 						<div class="col-md-9 column">
 						  <select ng-model="solicitacao.estudante.campus" ng-options="campus.descricao for campus in campusList" id="campus" class="form-control">
-							<option value="">-- select CAMPUS --</option>
+							<option value="">-- Selecione Campus --</option>
 						  </select>
 						</div>
 					  </div>
@@ -458,6 +470,15 @@ FileAPI = {
 			  <div class="row clearfix" style="background-color: #E0F8E6">
 				<div class="col-md-12 column">
 					<input ng-model="aceiteContratoTemp" id="aceiteContrato" type="checkbox" required >Aceite Contrato
+				
+					<p>
+						<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+
+						
+								
+						<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+					</p>
+
 				</div>
 			  </div>          
 	<!--FIM CONTRATO $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->

@@ -89,6 +89,13 @@ crudApp.controller('CreateController', ['$scope','UserPojo', 'CampusRest', funct
 
 crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 'EstadoRest', 'SolicitacaoRest', function($scope, UserPojo, CampusRest, EstadoRest, SolicitacaoRest){
 
+  var MSG_SOLICITACAO_SUCESSO = 'Solicitacao efetuada com sucesso.';
+  var MSG_REDIRECIONANDO_GATEWAY_PAGAMENTO = 'Aguarde alguns instantes.. Você está sendo redirecionado para o PagSeguro.';
+
+  $scope.tipoFotoAceito = "'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp'"; 
+  $scope.tipoDocumentoAceito = "'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'"; 
+
+  $scope.alerts = [];
   $scope.regexSomenteNumeros =  /^[0-9]+$/;
 
     // datepicker options (ui-date)
@@ -106,21 +113,76 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
 
     $scope.estadoList = EstadoRest.query();
 
-  $scope.salvarUser = function(){
-    
-    console.log($scope.solicitacao);
+    // ALERTS (Array and Actions) $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
+    $scope.messagesResult = [
+       //{ type: 'success', msg: '... ngs up and try submitting again.' },    
+    ];
 
-    SolicitacaoRest.create($scope.solicitacao);
-                                
+    $scope.closeAlert = function(index) {
+      $scope.messagesResult.splice(index, 1);
+    };
+
+  $scope.salvarUser = function(){
+
+      //LIMPAR ALERTs erros before Save
+      if($scope.messagesResult.length >=1 ){
+        $scope.messagesResult.splice(0, $scope.messagesResult.length - 1);    
+      }  
+      
+    //var retorno =  SolicitacaoRest.create($scope.solicitacao);
+
+    //Resource.action([parameters], postData, [success], [error])
+
+    SolicitacaoRest.create([], $scope.solicitacao
+      , function(sucesso){
+                    
+          
+          var sucessofromJson = angular.fromJson(sucesso);
+                  
+          //Alert w/ messagem de sucesso
+          $scope.messagesResult.push({ type: 'success', msg: MSG_SOLICITACAO_SUCESSO}); 
+          $scope.messagesResult.push({ type: 'success', msg: MSG_REDIRECIONANDO_GATEWAY_PAGAMENTO});    
+
+          //REDIRECT to GateWay de Pagamento
+          var delay = 3000;
+          setTimeout(function(){ window.location = sucessofromJson['urlSolicitacaoSucesso'] ;}, delay);
+
+        }
+
+      , function(error){
+
+         var errofromJson = angular.fromJson(error.data);
+                           
+            for (var i = 0; i < errofromJson.length; i++) {
+              
+              var erroList = errofromJson[i];
+                          
+              var messagemErroCampo = "";
+              var campoAux = "";
+              var messagemAux = "";
+                                          
+                for (var erro in erroList) {                    
+
+                    if(erro == 'field')
+                      campoAux = erroList['field'];
+
+                    if(erro == 'message')
+                      messagemAux = erroList['message'];                  
+                                                                              
+                }                                
+                
+                 messagemErroCampo = "Campo: [" + campoAux+ "] " + " - " + " Erro: " + messagemAux;
+                 
+                 $scope.messagesResult.push({ type: 'danger', msg: messagemErroCampo });                 
+            }
+
+        });                              
   };
+
 }]);
 
 
 crudApp.controller('UploadFotoController', ['$scope', '$http', '$timeout', '$upload', function($scope, $http, $timeout, $upload){
-
-  function sendAlert(){
-    alert('<<<< sendAlert >>>>');
-  }
 
 // ALERTS (Array and Actions) $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
   $scope.alerts = [
@@ -194,9 +256,9 @@ var howToSend = 1;
         document.getElementById("fileFoto").value ='';          
       }
 
-      var tipoFotoAceito = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp']; 
+      $scope.tipoFotoAceito = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp']; 
 
-      var flagExisteTipo = $.inArray(fType, tipoFotoAceito);
+      var flagExisteTipo = $.inArray(fType, $scope.tipoFotoAceito);
 
       if(flagExisteTipo == -1){
 
@@ -360,13 +422,12 @@ crudApp.controller('DocumentoUploadController', ['$scope', '$http', '$timeout', 
   };
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
 
-var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/'; 
-var KEY_MULTIPARTI_FILE_UPLOAD_FOTO = 'fotoFile';
+var URL_BASE_SERVER_UPLOAD_DOCUMENTO = 'http://localhost:9000/upload/documento/'; 
+var KEY_MULTIPARTI_FILE_UPLOAD_DOCUMENTO = 'documentoFile';
 var HTTP_METHOD = 'POST';
 var MSG_ERRO_TAMANHO_DOCUMENTO = 'Documento tamanho máximo de 1MB';
 var MSG_ERRO_TIPO_DOCUMENTO = ' é tipo não permitido p/ Documento.';
-var MSG_FOTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
-var MSG_DOCUMENTO_UPLOAD_SUCESSO = 'Foto - Carregada com sucesso.'
+var MSG_DOCUMENTO_UPLOAD_SUCESSO = 'Documento - Carregado com sucesso.';
 
 var uByte = 1;
 var uKB = uByte * 1024;
@@ -422,9 +483,9 @@ var howToSend = 1;
         document.getElementById("fileDocumento").value ='';          
       }
 
-      var tipoDocumentoAceito = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; 
+      $scope.tipoDocumentoAceito = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; 
 
-      var flagExisteTipo = $.inArray(fType, tipoDocumentoAceito);
+      var flagExisteTipo = $.inArray(fType, $scope.tipoDocumentoAceito);
 
       if(flagExisteTipo == -1){
 
@@ -481,7 +542,7 @@ var howToSend = 1;
     $scope.progress[index] = 0;
     $scope.errorMsg = null;
 
-    var urlUploadWithCPF = URL_BASE_SERVER_UPLOAD + $scope.solicitacao.estudante.cpf;
+    var urlUploadWithCPF = URL_BASE_SERVER_UPLOAD_DOCUMENTO + $scope.solicitacao.estudante.cpf;
     
     if (howToSend == 1) {  
       $scope.upload[index] = $upload.upload({
@@ -494,7 +555,7 @@ var howToSend = 1;
 
         file: $scope.selectedFiles[index],
                                     
-        fileFormDataName: KEY_MULTIPARTI_FILE_UPLOAD_FOTO
+        fileFormDataName: KEY_MULTIPARTI_FILE_UPLOAD_DOCUMENTO 
         
       });
 
@@ -507,7 +568,7 @@ var howToSend = 1;
            //APRESENTADO RESPOSTA DO SERVIDOR(CAREGADO ou NAO com sucesso) 
           if($scope.codigoDocumentoResult[0] == '200'){              
               $scope.solicitacao.estudante.nomeArquivoDocumento = $scope.uploadDocumentoResult[0]; 
-              $scope.alerts.push({ type: 'success', msg: MSG_FOTO_UPLOAD_SUCESSO }); 
+              $scope.alerts.push({ type: 'success', msg: MSG_DOCUMENTO_UPLOAD_SUCESSO }); 
           }else{
               console.log('$scope.codigoDocumentoResult: ' + $scope.codigoDocumentoResult);
               console.log('$scope.uploadDocumentoResult.erroMessage: ' + $scope.uploadDocumentoResult.erroMessage);
@@ -535,7 +596,7 @@ var howToSend = 1;
       var fileReader = new FileReader();
             fileReader.onload = function(e) {
             $scope.upload[index] = $upload.http({
-              url: URL_BASE_SERVER_UPLOAD,
+              url: URL_BASE_SERVER_UPLOAD_DOCUMENTO,
           headers: {'Content-Type': $scope.selectedFiles[index].type},
           data: e.target.result
             }).then(function(response) {
@@ -571,4 +632,6 @@ var howToSend = 1;
   };
 
 }]);
+
+
 
