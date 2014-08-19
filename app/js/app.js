@@ -18,16 +18,19 @@ var crudApp = angular.module('crudApp', appDependencies);
 
 
 crudApp.config(['$routeProvider','$sceDelegateProvider','$httpProvider', function($routeProvider, $sceDelegateProvider,$httpProvider) {
-  $routeProvider.when('/vw-list-user', {templateUrl: 'partials/list-user.html', controller: 'ListController'});
-  $routeProvider.when('/vw-detail-user/:id', {templateUrl: 'partials/detail-user.html', controller: 'DetailController'});
-  $routeProvider.when('/vw-create-user', {templateUrl: 'partials/create-user.html', controller: 'CreateController'});
+  
+  //$routeProvider.when('/vw-list-user', {templateUrl: 'partials/list-user.html', controller: 'ListController'});
+  //$routeProvider.when('/vw-detail-user/:id', {templateUrl: 'partials/detail-user.html', controller: 'DetailController'});
+  //$routeProvider.when('/vw-create-user', {templateUrl: 'partials/create-user.html', controller: 'CreateController'});
 
-  $routeProvider.when('/vw-solicitacao-form', {templateUrl: 'partials/solicitacao-form.html', controller: 'SolicitacaoController'});
+  //$routeProvider.when('/vw-solicitacao-form', {templateUrl: 'partials/solicitacao-form.html', controller: 'SolicitacaoController'});
+  $routeProvider.when('/', {templateUrl: 'partials/solicitacao-form.html', controller: 'SolicitacaoController'});
 
-  $routeProvider.when('/vw-upload-foto', {templateUrl: 'partials/upload-foto.html', controller: 'UploadFotoController'});
+  //$routeProvider.when('/vw-upload-foto', {templateUrl: 'partials/upload-foto.html', controller: 'UploadFotoController'});
 
   
-  $routeProvider.otherwise({redirectTo: '/vw-list-user'});
+  //$routeProvider.otherwise({redirectTo: '/vw-list-user'});
+  $routeProvider.otherwise({redirectTo: '/'});
 
   $httpProvider.interceptors.push('httpInterceptor');
   

@@ -124,6 +124,11 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
 
   $scope.salvarUser = function(){
 
+      //Default value for Instituicao
+      $scope.solicitacao.estudante.idInstituicao = 1;
+      $scope.solicitacao.estudante.localEntrega = 'c';
+
+
       //LIMPAR ALERTs erros before Save
       if($scope.messagesResult.length >=1 ){
         $scope.messagesResult.splice(0, $scope.messagesResult.length - 1);    
@@ -177,6 +182,11 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
             }
 
         });                              
+  };
+
+  $scope.abrirContrato = function(){
+                                    
+            window.open("http://www.dceunifacs.com", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=600, height=600");     
   };
 
 }]);

@@ -33,6 +33,10 @@
 
     }
 
+    .estilo-botao-acao{
+    	width: 75px;
+    }
+
 </style>
 
 	
@@ -53,19 +57,25 @@ FileAPI = {
 };
 </script>
 
-<h3>::: Solicitacao - Form :::</h3>
+ <center> <h3> Solicitação carteira estudantil 2014 </h3></center>
+ <hr>
 
 <div ng-controller="SolicitacaoController">
 	<div>
 		<alert ng-repeat="mResult in messagesResult" type="{{mResult.type}}" close="closeAlert($index)">{{mResult.msg}}</alert> 
 	</div>
 	
-
     <form  name="formSolicitacao" novalidate="novalidate" role="form" class="form-horizontal css-form">
-		<div class="container-fluid">
+		<div class="container-fluid">	
 		  <div class="row clearfix">
 			<div class="col-md-12 column">
-	<!-- D PESSOAIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           
+<!-- BOTOES ACOES $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           
+			  <div class="row clearfix" style="background-color: #F5F6CE; text-align: right">
+				<div class="col-md-12 column">
+					<input ng-click="salvarUser()" type="button" value="enviar" ng-disabled="formSolicitacao.$invalid" class="btn btn-md btn-primary estilo-botao-acao" >   
+				</div>
+			  </div> 
+<!-- D PESSOAIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           
 			  <div class="row clearfix" style ="background-color: #EFF2FB">
 				<div class="col-md-12 column">
 
@@ -74,7 +84,7 @@ FileAPI = {
 					  <div class="row clearfix">
 						<div class="col-md-3 column" draggable="true"><label for="nome">Nome:</label></div>
 						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.nome" ng-required id="nome" type="text" class="form-control" placeHolder="Nome completo">
+						  <input ng-model="solicitacao.estudante.nome" ng-maxlength=100 maxlength="100" ng-required="true" id="nome" type="text" class="form-control" placeHolder="Nome completo">
 						</div>
 					  </div>
 					</div>
@@ -104,7 +114,7 @@ FileAPI = {
 					  <div class="row clearfix">
 						<div class="col-md-3 column" draggable="true"><label for="rg">RG</label></div>
 						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.rg" ng-maxlength=15 ng-pattern="regexSomenteNumeros" maxlength="15" id="rg" type="text" class="form-control" placeHolder="RG - Somente Números">
+						  <input ng-model="solicitacao.estudante.rg" ng-maxlength=15 ng-pattern="regexSomenteNumeros" maxlength="15" ng-required="true" id="rg" type="text" class="form-control" placeHolder="RG - Somente Números">
 						</div>
 					  </div>
 					</div>
@@ -115,7 +125,7 @@ FileAPI = {
 					  <div class="row clearfix">
 						<div class="col-md-3 column" draggable="true"><label for="email">E-mail</label></div>
 						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.email" id="email" type="email" required placeHolder="E-mail" class="form-control">
+						  <input ng-model="solicitacao.estudante.email" ng-maxlength=100 maxlength="100" id="email" type="email" required placeHolder="E-mail" class="form-control">
 						</div>
 					  </div>
 					</div>
@@ -192,7 +202,7 @@ FileAPI = {
 											</progressbar>
 								  		</div>
 								  		<div class="col-md-2 column">
-								  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> X </button>
+								  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> excluir </button>
 								  		</div>
 								  </div> 
 
@@ -200,13 +210,13 @@ FileAPI = {
 									  <div class="row clearfix">
 									  		<div class="col-md-3 column">
 									  			<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
-									  			Start
+									  			enviar
 												</button>
 									  		</div>
 									  		<div class="col-md-3 column">
 									  			<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
 													ng-disabled="!hasUploader($index) || progress[$index] >= 100">
-										  		Abort                               
+										  		abortar                               
 												</button>
 									  		</div>							  		
 									  		<div class="col-md-6 column"></div>
@@ -221,12 +231,8 @@ FileAPI = {
 						</div>
 					  </div>
 					</div>
-					<div class="col-md-6 column">
-						
-					</div>
-				  </div>
-
-				  <div class="row clearfix">
+					<!--- /////////////////	UPLOAD DOCUMENTO	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
+					
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
 						<div class="col-md-3 column" draggable="true"><label for="">Documento</label></div>
@@ -255,7 +261,7 @@ FileAPI = {
 													</progressbar>
 										  		</div>
 										  		<div class="col-md-2 column">
-										  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> X </button>
+										  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> excluir </button>
 										  		</div>
 										  </div> 
 
@@ -263,13 +269,13 @@ FileAPI = {
 											  <div class="row clearfix">
 											  		<div class="col-md-3 column">
 											  			<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
-											  			Start
+											  			enviar
 														</button>
 											  		</div>
 											  		<div class="col-md-3 column">
 											  			<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
 															ng-disabled="!hasUploader($index) || progress[$index] >= 100">
-												  		Abort                               
+												  		abortar                               
 														</button>
 											  		</div>							  		
 											  		<div class="col-md-6 column"></div>
@@ -283,11 +289,10 @@ FileAPI = {
 						</div>
 					  </div>
 					</div>
-					<div class="col-md-6 column">
-						
-					</div>
+					
+					<!-- FIM UPLOAD DOCUMENTO \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
 				  </div>
-
+				  			  
 				  <div class="row clearfix">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
@@ -391,6 +396,7 @@ FileAPI = {
 						<div class="col-md-3 column" draggable="true"><label for="instituicao">Instituição</label></div>
 						<div class="col-md-9 column">
 						  <input readonly id="instituicao" type="text" value="UNIFACS" placeHolder="UNIFACS" class="form-control">
+						  <input type="hidden" ng-model="solicitacao.estudante.idInstituicao">
 						</div>
 					  </div>
 					</div>
@@ -469,26 +475,15 @@ FileAPI = {
 	<!-- CONTRATO $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
 			  <div class="row clearfix" style="background-color: #E0F8E6">
 				<div class="col-md-12 column">
-					<input ng-model="aceiteContratoTemp" id="aceiteContrato" type="checkbox" required >Aceite Contrato
-				
-					<p>
-						<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-
-						
-								
-						<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-					</p>
+					<input ng-model="aceiteContratoTemp" id="aceiteContrato" type="checkbox" required > Concordo com termos 
+					- 
+					<a href="" ng-click="abrirContrato()">Clique aqui para ler o regulamento</a>								
 
 				</div>
 			  </div>          
-	<!--FIM CONTRATO $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
-			  <div class="row clearfix" style="background-color: #F5F6CE">
-				<div class="col-md-12 column">
-					<input ng-click="salvarUser()" type="button" value="Save" ng-disabled="formSolicitacao.$invalid" class="btn btn-sm btn-primary">   
-				</div>
-			  </div>          
+	<!--FIM CONTRATO $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->         
 			</div>
-		  </div>
+		 </div>
 		</div>
 
 	</form>		
