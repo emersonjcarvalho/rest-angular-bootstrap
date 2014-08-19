@@ -72,7 +72,7 @@ FileAPI = {
 <!-- BOTOES ACOES $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           
 			  <div class="row clearfix" style="background-color: #F5F6CE; text-align: right">
 				<div class="col-md-12 column">
-					<input ng-click="salvarUser()" type="button" value="enviar" ng-disabled="formSolicitacao.$invalid" class="btn btn-md btn-primary estilo-botao-acao" >   
+					<input ng-click="salvarUser()" type="button" value="enviar" ng-disabled="formSolicitacao.$invalid && flagSolicitacaoSuccess == false" class="btn btn-md btn-primary estilo-botao-acao" >   
 				</div>
 			  </div> 
 <!-- D PESSOAIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           

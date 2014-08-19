@@ -91,6 +91,7 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
 
   var MSG_SOLICITACAO_SUCESSO = 'Solicitacao efetuada com sucesso.';
   var MSG_REDIRECIONANDO_GATEWAY_PAGAMENTO = 'Aguarde alguns instantes.. Você está sendo redirecionado para o PagSeguro.';
+  $scope.flagSolicitacaoSuccess = false;
 
   $scope.tipoFotoAceito = "'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp'"; 
   $scope.tipoDocumentoAceito = "'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'"; 
@@ -110,13 +111,10 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
     };
 
     $scope.campusList = CampusRest.query();
-
     $scope.estadoList = EstadoRest.query();
 
     // ALERTS (Array and Actions) $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
-    $scope.messagesResult = [
-       //{ type: 'success', msg: '... ngs up and try submitting again.' },    
-    ];
+    $scope.messagesResult = [/* { type: 'success', msg: '... ngs up and try submitting again.' }, */];
 
     $scope.closeAlert = function(index) {
       $scope.messagesResult.splice(index, 1);
@@ -140,8 +138,7 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
 
     SolicitacaoRest.create([], $scope.solicitacao
       , function(sucesso){
-                    
-          
+                              
           var sucessofromJson = angular.fromJson(sucesso);
                   
           //Alert w/ messagem de sucesso
@@ -149,7 +146,7 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
           $scope.messagesResult.push({ type: 'success', msg: MSG_REDIRECIONANDO_GATEWAY_PAGAMENTO});    
 
           //REDIRECT to GateWay de Pagamento
-          var delay = 3000;
+          var delay = 5000;
           setTimeout(function(){ window.location = sucessofromJson['urlSolicitacaoSucesso'] ;}, delay);
 
         }
