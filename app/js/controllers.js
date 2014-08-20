@@ -432,14 +432,14 @@ crudApp.controller('DocumentoUploadController', ['$scope', '$http', '$timeout', 
 var URL_BASE_SERVER_UPLOAD_DOCUMENTO = 'http://localhost:9000/upload/documento/'; 
 var KEY_MULTIPARTI_FILE_UPLOAD_DOCUMENTO = 'documentoFile';
 var HTTP_METHOD = 'POST';
-var MSG_ERRO_TAMANHO_DOCUMENTO = 'Documento tamanho máximo de 1MB';
+var MSG_ERRO_TAMANHO_DOCUMENTO = 'Documento tamanho máximo de 600KB';
 var MSG_ERRO_TIPO_DOCUMENTO = ' é tipo não permitido p/ Documento.';
 var MSG_DOCUMENTO_UPLOAD_SUCESSO = 'Documento - Carregado com sucesso.';
 
 var uByte = 1;
 var uKB = uByte * 1024;
-var uMB = uKB * 1024;
-var TAM_DOCUMENTO_ACCEPT = uMB * 1;
+//var uMB = uKB * 1024;
+var TAM_DOCUMENTO_ACCEPT = uKB * 600;
 
 //Multupart/form-data ou File binary
 var howToSend = 1;
