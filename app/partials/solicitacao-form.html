@@ -1,4 +1,5 @@
-	<style type="text/css">
+<style type="text/css">
+	/**
     .css-form input.ng-invalid.ng-dirty {
         background-color: #F8E0E6;
     }
@@ -6,6 +7,7 @@
     .css-form input.ng-valid.ng-dirty {
         background-color: #E0F8E0;
     }
+    **/
 
     .sel-file img {
         float: left;
@@ -34,8 +36,23 @@
     }
 
     .estilo-botao-acao{
-    	width: 75px;
+    	width: 90px;
     }
+
+.form-group .help-block {
+  display: none;
+}
+ 
+.form-group.has-error .help-block {
+  display: block;
+}
+
+.linha-form{
+	padding-top: 3px;
+    padding-bottom: 4px;
+    padding-right: 0px;
+    padding-left: 0px;	 
+}
 
 </style>
 
@@ -65,241 +82,302 @@ FileAPI = {
 		<alert ng-repeat="mResult in messagesResult" type="{{mResult.type}}" close="closeAlert($index)">{{mResult.msg}}</alert> 
 	</div>
 	
-    <form  name="formSolicitacao" novalidate="novalidate" role="form" class="form-horizontal css-form">
+    <form  name="formSolicitacao" novalidate="novalidate">
 		<div class="container-fluid">	
 		  <div class="row clearfix">
 			<div class="col-md-12 column">
 <!-- BOTOES ACOES $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           
-			  <div class="row clearfix" style="background-color: #F5F6CE; text-align: right">
-				<div class="col-md-12 column">
+			  <div class="row clearfix linha-form" style="background-color: #F5F7FD; text-align: left">
+				<div class="col-md-12 column">										
 					<input ng-click="salvarUser()" type="button" value="enviar" ng-disabled="formSolicitacao.$invalid && flagSolicitacaoSuccess == false" class="btn btn-md btn-primary estilo-botao-acao" >   
+					- 
+					<input type="button" value="verificar-erros" ng-click="validarGeralForm()" class="btn btn-warning">
 				</div>
 			  </div> 
-<!-- D PESSOAIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->           
+			 <div class="row clearfix" style ="background-color: #EFF3FF">
+				<p></P>
+			</div>	
+<!-- D PESSOAIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  -->           
 			  <div class="row clearfix" style ="background-color: #EFF2FB">
 				<div class="col-md-12 column">
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="nome">Nome:</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.nome" ng-maxlength=100 maxlength="100" ng-required="true" id="nome" type="text" class="form-control" placeHolder="Nome completo">
-						</div>
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="nome">Nome:</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="nome" id="nome" ng-model="solicitacao.estudante.nome" ng-maxlength=100 maxlength="100" ng-required="true"  class="form-control" placeHolder="Nome completo">
+								<p class="help-block" ng-if="formSolicitacao.nome.$error.required">[Nome] é um campo obrigatório.</p>
+							</div>
+						</div>	
 					  </div>
 					</div>
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="dataNascimento">DT Nascimento</label></div>
-						<div class="col-md-9 column">
-						  <!-- ############ DATA NASCIMENTO ############## -->
-						  <input ng-model="solicitacao.estudante.dataNascimento" name="dataNascimento" id="dataNascimento" 
-						   type="text"  ui-date="dateOptions"  required class="form-control" placeHolder="Data padrão dd/MM/yyyy"> 
-						</div>
-					  </div>
-					</div>
-				  </div>
-
-				  <div class="row clearfix">
-					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column"><label for="cpf">CPF</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.cpf" ng-cpf ng-minlength=11 ng-maxlength=11 maxlength="11"  ng-required="true" id="cpf" name="cpf" type="text" 
-						  			 class="form-control" placeHolder="CPF - Somente Números">
-						</div>
-					  </div>
-					</div>
-					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="rg">RG</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.rg" ng-maxlength=15 ng-pattern="regexSomenteNumeros" maxlength="15" ng-required="true" id="rg" type="text" class="form-control" placeHolder="RG - Somente Números">
-						</div>
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="dataNascimento">DT Nascimento</label></div>
+							<div class="col-md-9 column">
+							  <!-- ############ DATA NASCIMENTO ############## -->
+							  <input type="text" name="dataNascimento" id="dataNascimento" ng-model="solicitacao.estudante.dataNascimento"
+							     ui-date="dateOptions" required class="form-control" placeHolder="Data padrão dd/MM/yyyy"> 
+							  <p class="help-block" ng-if="formSolicitacao.dataNascimento.$error.required">[DT Nascimento] é um campo obrigatório.</p> 							  
+							</div>
+						</div>	
 					  </div>
 					</div>
 				  </div>
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="email">E-mail</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.email" ng-maxlength=100 maxlength="100" id="email" type="email" required placeHolder="E-mail" class="form-control">
-						</div>
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column"><label class="control-label" for="cpf">CPF</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="cpf" id="cpf" ng-model="solicitacao.estudante.cpf" ng-cpf ng-minlength=11 ng-maxlength=11 maxlength="11"  ng-required="true"    
+										 class="form-control" placeHolder="CPF - Somente Números">
+								<p class="help-block" ng-if="formSolicitacao.cpf.$error.required">[CPF] é um campo obrigatório.</p>
+								<p class="help-block" ng-if="formSolicitacao.cpf.$error.maxlength || formSolicitacao.cpf.$error.minlength">[CPF] deve possuir 11 caracteres.</p> 								
+								<p class="help-block" ng-if="formSolicitacao.cpf.$invalid && !(formSolicitacao.cpf.$error.required || formSolicitacao.cpf.$error.minlength)">[CPF] inválido</p>								
+							</div>
+						</div>	
 					  </div>
 					</div>
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="">Sexo</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.sexo" value="M" id="sexoM" type="radio" required>Masculno
-						  <input ng-model="solicitacao.estudante.sexo" value="F" id="sexoF" type="radio" >Feminino
-						</div>
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="rg">RG</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="rg" id="rg" ng-model="solicitacao.estudante.rg" ng-maxlength=15 ng-pattern="regexSomenteNumeros" maxlength="15" ng-required="true" class="form-control" placeHolder="RG - Somente Números">								
+								<p class="help-block" ng-if="formSolicitacao.rg.$error.required ">[RG] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.rg.$error.maxlength">[RG] deve possuir no máximo 15 digitos.</p> 								
+								<p class="help-block" ng-if="formSolicitacao.rg.$error.pattern">[RG] somente números.</p> 	
+							</div>
+						</div>	
+					  </div>
+					</div>
+				  </div>
+
+				  <div class="row clearfix linha-form">
+					<div class="col-md-6 column">
+					  <div class="row clearfix">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="email">E-mail</label></div>
+							<div class="col-md-9 column">
+							  <input type="email" name="email" id="email" ng-model="solicitacao.estudante.email" ng-maxlength=100 maxlength="100" required placeHolder="E-mail" class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.email.$error.required">[E-mail] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.email.$error.email">[E-mail] inválido.</p> 
+							</div>
+						</div>	
+					  </div>
+					</div>
+					<div class="col-md-6 column">
+					  <div class="row clearfix">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="sexo">Sexo</label></div>
+							<div class="col-md-9 column">
+							  <input type="radio" name="sexo" id="sexoM" ng-model="solicitacao.estudante.sexo" value="M" required>Masculno
+							  <input type="radio" name="sexo" id="sexoF" ng-model="solicitacao.estudante.sexo" value="F" required>Feminino
+								<p class="help-block" ng-if="formSolicitacao.sexo.$error.required">[Sexo] é um campo obrigatório.</p> 
+							</div>
+						</div>	
 					  </div>
 					</div>
 				  </div>  
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
+					
+					<!-- ########## TELEFONE + DDD TELEFONE ########## -->
 					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="telefone">Telefone</label></div>
+					  <div class="row clearfix">						
+						<div class="col-md-3 column" draggable="true"><label class="control-label" for="telefone">Telefone</label></div>
 						<div class="col-md-9 column">
-						  	<div class="row clearfix">
-						  		<div class="col-md-3 column">
-						  			<input ng-model="solicitacao.estudante.codigo_area_telefone" ng-pattern="regexSomenteNumeros" ng-minlength=2 ng-maxlength=2 maxlength="2" id="codigo_area_telefone" type="text" required placeHolder="DDD" class="form-control"> 
-						  		</div>
-						  		<div class="col-md-9 column">
-						  			<input ng-model="solicitacao.estudante.telefone" ng-pattern="regexSomenteNumeros" ng-minlength=8 ng-maxlength=9 maxlength="9" id="telefone" type="text" required placeHolder="Somente números" class="form-control">      
-						  		</div>
-						  	</div>	
-						</div>
+							<div class="row clearfix">								
+									<div class="col-md-3 column">
+										<div class="form-group" show-errors>
+											<input type="text" name="codigo_area_telefone" id="codigo_area_telefone" ng-model="solicitacao.estudante.codigo_area_telefone" ng-pattern="regexSomenteNumeros" ng-minlength=2 ng-maxlength=2 maxlength="2" required placeHolder="DDD" class="form-control"> 
+												<p class="help-block" ng-if="formSolicitacao.codigo_area_telefone.$error.required">[DDD Telefone] é um campo obrigatório.</p> 	
+												<p class="help-block" ng-if="formSolicitacao.codigo_area_telefone.$error.pattern">[DDD Telefone] somente números.</p> 
+												<p class="help-block" ng-if="formSolicitacao.codigo_area_telefone.$error.maxlength || formSolicitacao.codigo_area_telefone.$error.minlength">[DDD Telefone] deve possuir 02 digitos.</p>  
+										</div>		
+									</div>
+									<div class="col-md-9 column">
+										<div class="form-group" show-errors>
+											<input type="text" name="telefone" id="telefone" ng-model="solicitacao.estudante.telefone" ng-pattern="regexSomenteNumeros" ng-minlength=8 ng-maxlength=9 maxlength="9" required placeHolder="Somente números" class="form-control">      
+												<p class="help-block" ng-if="formSolicitacao.telefone.$error.required">[Telefone] é um campo obrigatório.</p> 	
+												<p class="help-block" ng-if="formSolicitacao.telefone.$error.pattern">[Telefone] somente números.</p> 
+												<p class="help-block" ng-if="formSolicitacao.telefone.$error.minlength">[Telefone] deve possuir no minimo 08 digitos.</p>  
+										</div>	
+									</div>								
+							</div>	
+						</div>					
 					  </div>
 					</div>
+					
+					<!-- ########## CEULAR + DDD CELULAR ########## -->
 					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="celular">celular</label></div>
+					  <div class="row clearfix">						
+						<div class="col-md-3 column" draggable="true"><label class="control-label">Celular</label></div>
 						<div class="col-md-9 column">
-
-							<div class="row clearfix">
-						  		<div class="col-md-3 column">
-									<input ng-model="solicitacao.estudante.codigo_area_celular" ng-pattern="regexSomenteNumeros" ng-minlength=2 ng-maxlength=2 maxlength="2" id="codigo_area_celular" type="text" required placeHolder="DDD" class="form-control"> 
-						  		</div>
-						  		<div class="col-md-9 column">
-									<input ng-model="solicitacao.estudante.celular" ng-pattern="regexSomenteNumeros" ng-minlength=8 ng-maxlength=9 maxlength="9" id="celular" type="text" required placeHolder="Somente números" class="form-control">             
-						  		</div>
-						  	</div>	
-						  
-						</div>
+							<div class="row clearfix">								
+									<div class="col-md-3 column">
+										<div class="form-group" show-errors>
+											<input type="text" name="codigo_area_celular" id="codigo_area_celular" ng-model="solicitacao.estudante.codigo_area_celular" ng-pattern="regexSomenteNumeros" ng-minlength=2 ng-maxlength=2 maxlength="2" required placeHolder="DDD" class="form-control"> 
+												<p class="help-block" ng-if="formSolicitacao.codigo_area_celular.$error.required">[DDD Celular] é um campo obrigatório.</p> 	
+												<p class="help-block" ng-if="formSolicitacao.codigo_area_celular.$error.pattern">[DDD Celular] somente números.</p> 
+												<p class="help-block" ng-if="formSolicitacao.codigo_area_celular.$error.maxlength || formSolicitacao.codigo_area_celular.$error.minlength">[DDD Celular] deve possuir 02 digitos.</p>  
+										</div>		
+									</div>
+									<div class="col-md-9 column">
+										<div class="form-group" show-errors>
+											<input type="text" name="celular" id="celular" ng-model="solicitacao.estudante.celular" ng-pattern="regexSomenteNumeros" ng-minlength=8 ng-maxlength=9 maxlength="9" required placeHolder="Somente números" class="form-control">      
+												<p class="help-block" ng-if="formSolicitacao.celular.$error.required">[Celular] é um campo obrigatório.</p> 	
+												<p class="help-block" ng-if="formSolicitacao.celular.$error.pattern">[Celular] somente números.</p> 
+												<p class="help-block" ng-if="formSolicitacao.celular.$error.minlength">[Celular] deve possuir no minimo 08 digitos.</p>  
+										</div>	
+									</div>								
+							</div>	
+						</div>					
 					  </div>
-					</div>
+					</div>					
 				  </div> 
 				  
-				  <div class="row clearfix">
-					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"> <label for="fileFoto">Foto</label></div>
-						<div class="col-md-9 column">
-						  <!-- xixixixixixixi   UPLOAD FOTO  xixixixxixix -->
-
-						<div ng-controller="UploadFotoController">
-							<input ng-model="solicitacao.estudante.nomeArquivoFoto" id="nomeArquivoFoto" type="hidden">	  <!--{{solicitacao.estudante.nomeArquivoFoto}} -->                                         
-						                   
-							  <input type="file" id="fileFoto" name="fileFoto" accept="image/x-png, image/gif, image/jpeg" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">              														
-							  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-
-
-							<div class="container-fluid" ng-show="selectedFiles != null">           
-								<div class="sel-file estilo-area-upload" ng-repeat="f in selectedFiles">
-								  	
-								  <div class="row clearfix">
-								  		<div class="col-md-5 column">
-								  			{{f.name}}
-								  		</div>
-								  		<div class="col-md-5 column">
-								  			<progressbar animate="false" value="progress[$index]" type="success">
-										  		<b>{{progress[$index]}}%</b>
-											</progressbar>
-								  		</div>
-								  		<div class="col-md-2 column">
-								  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> excluir </button>
-								  		</div>
-								  </div> 
-
-								  <div ng-show="progress[$index] < 100 ">  	
-									  <div class="row clearfix">
-									  		<div class="col-md-3 column">
-									  			<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
-									  			enviar
-												</button>
-									  		</div>
-									  		<div class="col-md-3 column">
-									  			<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
-													ng-disabled="!hasUploader($index) || progress[$index] >= 100">
-										  		abortar                               
-												</button>
-									  		</div>							  		
-									  		<div class="col-md-6 column"></div>
-									  </div>
-								</div>    							  
-								</div>
-							</div>	                                                       
-						  
-						</div>
-
-						  <!-- xixixixxixixxi FIM UPLOAD FOTO xxixixixixi -->
-						</div>
-					  </div>
-					</div>
-					<!--- /////////////////	UPLOAD DOCUMENTO	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
+				  <!-- ######################## UPLOADs FOTO e DOCUMETO ######################## -->
+				  <div class="row clearfix linha-form">
 					
+					<!-- xixixixixixixi   UPLOAD FOTO  xixixixxixix -->
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="">Documento</label></div>
-						<div class="col-md-9 column">
-						<!-- xixixixxixixxi UPLOAD DOCUMENTO xxixixixixi -->
-						<div ng-controller="DocumentoUploadController">   
-							<input ng-model="solicitacao.estudante.nomeArquivoDocumento" name="nomeArquivoDocumento" id="nomeArquivoDocumento" type="hidden">     
+						<div class="form-group" show-errors>
+						
+							<div class="col-md-3 column" draggable="true"> <label class="control-label" for="fileFoto">Foto</label></div>
+							<div class="col-md-9 column">						  
 
-							<!-- >> {{solicitacao.estudante.nomeArquivoDocumento}} -->          
-
-								  <input type="file" id="fileDocumento" name="fileDocumento" 
-								  accept="{{tipoDocumentoAceito}}" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" class="form-control">                
-																					  
-								  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>   
+							<div ng-controller="UploadFotoController">
+								<input type="hidden" name="nomeArquivoFoto" id="nomeArquivoFoto" ng-model="solicitacao.estudante.nomeArquivoFoto">	  <!--{{solicitacao.estudante.nomeArquivoFoto}} -->                                         
+											   
+								  <input type="file" name="fileFoto" id="fileFoto" accept="image/x-png, image/gif, image/jpeg" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" required class="form-control">              														
+								  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+									<p class="help-block" ng-if="formSolicitacao.fileFoto.$error.required">[Upload da Foto] é obrigatório.</p> 
 
 
 								<div class="container-fluid" ng-show="selectedFiles != null">           
-									<div class="sel-file estilo-area-upload" ng-repeat="f in selectedFiles">									  	
+									<div class="sel-file estilo-area-upload" ng-repeat="f in selectedFiles">
+										
+									  <div class="row clearfix">
+											<div class="col-md-5 column">
+												{{f.name}}
+											</div>
+											<div class="col-md-5 column">
+												<progressbar animate="false" value="progress[$index]" type="success">
+													<b>{{progress[$index]}}%</b>
+												</progressbar>
+											</div>
+											<div class="col-md-2 column">
+												<button ng-click="remove($index)" class="btn btn-sm btn-danger"> excluir </button>
+											</div>
+									  </div> 
+
+									  <div ng-show="progress[$index] < 100 ">  	
 										  <div class="row clearfix">
-										  		<div class="col-md-5 column">
-										  			{{f.name}}
-										  		</div>
-										  		<div class="col-md-5 column">
-										  			<progressbar animate="false" value="progress[$index]" type="success">
-												  		<b>{{progress[$index]}}%</b>
-													</progressbar>
-										  		</div>
-										  		<div class="col-md-2 column">
-										  			<button ng-click="remove($index)" class="btn btn-sm btn-danger"> excluir </button>
-										  		</div>
-										  </div> 
+												<div class="col-md-3 column">
+													<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+													enviar
+													</button>
+												</div>
+												<div class="col-md-3 column">
+													<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+														ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+													abortar                               
+													</button>
+												</div>							  		
+												<div class="col-md-6 column"></div>
+										  </div>
+									</div>    							  
+									</div>
+								</div>	                                                       
+							  
+							</div>
 
-										  <div ng-show="progress[$index] < 100 ">  	
-											  <div class="row clearfix">
-											  		<div class="col-md-3 column">
-											  			<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
-											  			enviar
-														</button>
-											  		</div>
-											  		<div class="col-md-3 column">
-											  			<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
-															ng-disabled="!hasUploader($index) || progress[$index] >= 100">
-												  		abortar                               
-														</button>
-											  		</div>							  		
-											  		<div class="col-md-6 column"></div>
-											  </div>
-										</div> 
-									</div>											
-								</div>    								  
-
-						  </div>
-						  <!-- xixixixxixixxi FIM UPLOAD DOCUMENTO xxixixixixi -->
+							  <!-- xixixixxixixxi FIM UPLOAD FOTO xxixixixixi -->
+							</div>
 						</div>
+					  </div>
+					</div>
+					<!--- /////////////////	UPLOAD DOCUMENTO	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->					
+					<div class="col-md-6 column">
+					<!-- xixixixxixixxi UPLOAD DOCUMENTO xxixixixixi -->
+					  <div class="row clearfix">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="">Documento</label></div>
+							<div class="col-md-9 column">							
+							<div ng-controller="DocumentoUploadController">   
+								<input type="hidden" name="nomeArquivoDocumento" id="nomeArquivoDocumento" ng-model="solicitacao.estudante.nomeArquivoDocumento">     
+
+								<!-- >> {{solicitacao.estudante.nomeArquivoDocumento}} -->          
+
+								<input type="file" name="fileDocumento" id="fileDocumento" 
+									  accept="{{tipoDocumentoAceito}}" ng-file-select="onFileSelect($files)" onclick="this.value=null" ng-disabled="!formSolicitacao.cpf.$valid" required class="form-control">                
+																						  
+									  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>   
+									  <p class="help-block" ng-if="formSolicitacao.fileDocumento.$error.required">[Upload da Documento] é obrigatório.</p> 	
+
+									<div class="container-fluid" ng-show="selectedFiles != null">           
+										<div class="sel-file estilo-area-upload" ng-repeat="f in selectedFiles">									  	
+											  <div class="row clearfix">
+													<div class="col-md-5 column">
+														{{f.name}}
+													</div>
+													<div class="col-md-5 column">
+														<progressbar animate="false" value="progress[$index]" type="success">
+															<b>{{progress[$index]}}%</b>
+														</progressbar>
+													</div>
+													<div class="col-md-2 column">
+														<button ng-click="remove($index)" class="btn btn-sm btn-danger"> excluir </button>
+													</div>
+											  </div> 
+
+											  <div ng-show="progress[$index] < 100 ">  	
+												  <div class="row clearfix">
+														<div class="col-md-3 column">
+															<button class="btn btn-sm btn-primary" ng-click="start($index)" ng-disabled="progress[$index] > 0">
+															enviar
+															</button>
+														</div>
+														<div class="col-md-3 column">
+															<button class="btn btn-sm btn-primary" ng-click="abort($index)" 
+																ng-disabled="!hasUploader($index) || progress[$index] >= 100">
+															abortar                               
+															</button>
+														</div>							  		
+														<div class="col-md-6 column"></div>
+												  </div>
+											</div> 
+										</div>											
+									</div>    								  
+
+							  </div>
+							  <!-- xixixixxixixxi FIM UPLOAD DOCUMENTO xxixixixixi -->
+							</div>
+						</div>	
 					  </div>
 					</div>
 					
 					<!-- FIM UPLOAD DOCUMENTO \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
 				  </div>
 				  			  
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="">Nome Exibição</label></div>
-						<div class="col-md-9 column">
-							<input ng-model="solicitacao.estudante.nomeExibicao" ng-maxlength=25 maxlength="25" id="cursoExibicao" type="text" required placeHolder="Nome Exibicao(somente 25 caracteres)" class="form-control">
-						</div>
+						<div class="form-group" show-errors>	
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="nomeExibicao">Nome Exibição</label></div>
+							<div class="col-md-9 column">
+								<input type="text" name="nomeExibicao" id="nomeExibicao" ng-model="solicitacao.estudante.nomeExibicao" ng-maxlength=25 maxlength="25" required placeHolder="Nome Exibicao(no máximo 25 caracteres)" class="form-control">
+									<p class="help-block" ng-if="formSolicitacao.nomeExibicao.$error.required">[Nome Exibição] é um campo obrigatório.</p> 	
+									<p class="help-block" ng-if="formSolicitacao.nomeExibicao.$error.maxlength">[Nome Exibição] deve possuir no máximo 25 caracteres.</p>  
+							</div>
+						</div>	
 					  </div>
 					</div>
 					<div class="col-md-6 column">
@@ -308,13 +386,18 @@ FileAPI = {
 				  </div>
 				  <!-- ENDERECO ############################################### -->
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="logradouro"><label for="cep">CEP</label></label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.cep" ng-pattern="regexSomenteNumeros" ng-minlength=8 ng-maxlength=8 maxlength="8" id="cep" type="text" required placeHolder="Somente Números" class="form-control estilo-cep">
-						</div>
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="cep">CEP</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="cep" id="cep" ng-model="solicitacao.estudante.cep" ng-pattern="regexSomenteNumeros" ng-minlength=8 ng-maxlength=8 maxlength="8" required placeHolder="Somente Números" class="form-control estilo-cep">
+								<p class="help-block" ng-if="formSolicitacao.cep.$error.required">[CEP] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.cep.$error.maxlength || formSolicitacao.cep.$error.minlength">[CEP] deve possuir 08 digitos.</p> 								
+								<p class="help-block" ng-if="formSolicitacao.cep.$error.pattern">[CEP] somente números.</p> 
+							</div>
+						</div>	
 					  </div>
 					</div>
 					<div class="col-md-6 column">
@@ -322,60 +405,82 @@ FileAPI = {
 					</div>
 				  </div>
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="logradouro">Endereço</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.logradouro" id="logradouro" type="text" required placeHolder="Endereço" class="form-control">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="logradouro">Endereço</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="logradouro" id="logradouro" ng-model="solicitacao.estudante.logradouro" ng-maxlength=150 maxlength="150" required placeHolder="Endereço" class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.logradouro.$error.required">[Endereço] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.logradouro.$error.maxlength">[Endereço] deve possuir no máximo 150 caracteres.</p>  
+							</div>
+						</div>	
+					  </div>
+					</div>
+					<div class="col-md-6 column">
+					  <div class="row clearfix">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="numeroEndereco">Número</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="numeroEndereco" id="numeroEndereco" ng-model="solicitacao.estudante.numeroEndereco" ng-maxlength=10 maxlength="10" required placeHolder="Num." class="form-control" class="form-control estilo-cep">
+								<p class="help-block" ng-if="formSolicitacao.numeroEndereco.$error.required">[Número] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.numeroEndereco.$error.maxlength">[Número] deve possuir no máximo 10 caracteres.</p>  
+							</div>
+						</div>	
+					  </div>
+					</div>
+				  </div>
+
+				  <div class="row clearfix linha-form">
+					<div class="col-md-6 column">
+					  <div class="row clearfix">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="complementoEndereco">Complemento</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="complementoEndereco" id="complementoEndereco" ng-model="solicitacao.estudante.complementoEndereco" ng-maxlength=50 maxlength="50" placeHolder="Complemento End." class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.complementoEndereco.$error.maxlength">[Complemento] deve possuir no máximo 50 caracteres.</p>  
+							</div>
 						</div>
 					  </div>
 					</div>
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="numeroEndereco">Número</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.numeroEndereco" id="numeroEndereco" type="text" required placeHolder="Num." class="form-control" class="form-control estilo-cep">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="bairro">Bairro</label></div>
+							<div class="col-md-9 column">                      
+							  <input type="text" name="bairro" id="bairro" ng-model="solicitacao.estudante.bairro" ng-maxlength=30 maxlength="30" required placeHolder="Bairro" class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.bairro.$error.required">[Bairro] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.bairro.$error.maxlength">[Bairro] deve possuir no máximo 30 caracteres.</p> 
+							</div>
 						</div>
 					  </div>
 					</div>
 				  </div>
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="complementoEndereco">Complemento</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.complementoEndereco" id="complementoEndereco" type="text" required placeHolder="Complemento End." class="form-control">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="estado">Estado</label></div>
+							<div class="col-md-9 column">
+								<select name="estado" id="estado" ng-model="solicitacao.estudante.estado" ng-options="estado.descricao for estado in estadoList" required class="form-control">
+								  <option value="">-- Selecione Estados --</option>
+								</select>
+									<p class="help-block" ng-if="formSolicitacao.estado.$error.required">[Estado] é um campo obrigatório.</p> 
+							</div>
 						</div>
 					  </div>
 					</div>
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="bairro">Bairro</label></div>
-						<div class="col-md-9 column">                      
-						  <input ng-model="solicitacao.estudante.bairro" id="bairro" type="text" required placeHolder="Bairro" class="form-control">
-						</div>
-					  </div>
-					</div>
-				  </div>
-
-				  <div class="row clearfix">
-					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="estado">Estado</label></div>
-						<div class="col-md-9 column">
-							<select ng-model="solicitacao.estudante.estado" ng-options="estado.descricao for estado in estadoList" id="estado" class="form-control">
-							  <option value="">-- Selecione Estados --</option>
-							</select>
-						</div>
-					  </div>
-					</div>
-					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="cidade">Cidade</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.cidade" id="cidade" type="text" required placeHolder="Cidade" class="form-control">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="cidade">Cidade</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="cidade" id="cidade" ng-model="solicitacao.estudante.cidade" ng-maxlength=70 maxlength="70" required placeHolder="Cidade" class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.cidade.$error.required">[Cidade] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.cidade.$error.maxlength">[Cidade] deve possuir no máximo 70 caracteres.</p> 
+							</div>
 						</div>
 					  </div>
 					</div>
@@ -387,13 +492,13 @@ FileAPI = {
 	<!-- FIM D PESSOAIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->          
 
 	<!-- D ACADEMICOS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->          
-			  <div class="row clearfix" style="background-color: #FBEFEF">
+			  <div class="row clearfix" style="background-color: #EFF2FB">
 				<div class="col-md-12 column">
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="instituicao">Instituição</label></div>
+						<div class="col-md-3 column" draggable="true"><label class="control-label" for="instituicao">Instituição</label></div>
 						<div class="col-md-9 column">
 						  <input readonly id="instituicao" type="text" value="UNIFACS" placeHolder="UNIFACS" class="form-control">
 						  <input type="hidden" ng-model="solicitacao.estudante.idInstituicao">
@@ -402,22 +507,66 @@ FileAPI = {
 					</div>
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="campus">Campus</label></div>
-						<div class="col-md-9 column">
-						  <select ng-model="solicitacao.estudante.campus" ng-options="campus.descricao for campus in campusList" id="campus" class="form-control">
-							<option value="">-- Selecione Campus --</option>
-						  </select>
-						</div>
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="campus">Campus</label></div>
+							<div class="col-md-9 column">
+							  <select name="campus" id="campus" ng-model="solicitacao.estudante.campus" ng-options="campus.descricao for campus in campusList" required class="form-control">
+								<option value="">-- Selecione Campus --</option>
+							  </select>
+							  <p class="help-block" ng-if="formSolicitacao.campus.$error.required">[Campus] é um campo obrigatório.</p> 
+							</div>
+						</div>	
 					  </div>
 					</div>
 				  </div>
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="matricula">Matricula</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.matricula" ng-minlength=8 ng-maxlength=10 maxlength="10" id="matricula" type="text" required placeHolder="Matricula" class="form-control">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="matricula">Matricula</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="matricula" id="matricula" ng-model="solicitacao.estudante.matricula" ng-minlength=7 ng-maxlength=9 maxlength="9" required placeHolder="Matricula" class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.matricula.$error.required">[Matricula] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.matricula.$error.minlength">[Matricula] deve possuir no minimo 07 caracteres.</p> 
+								<p class="help-block" ng-if="formSolicitacao.matricula.$error.maxlength">[Matricula] deve possuir no máximo 09 caracteres.</p> 
+							</div>
+						</div>	
+					  </div>
+					</div>
+					<div class="col-md-6 column">
+						
+					</div>
+				  </div>
+
+				  <div class="row clearfix linha-form">
+					<div class="col-md-6 column">
+					  <div class="row clearfix">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="curso">Curso</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="curso" id="curso" ng-model="solicitacao.estudante.curso" ng-maxlength=50 maxlength="50" required placeHolder="Curso" class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.curso.$error.required">[Curso] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.curso.$error.maxlength">[Curso] deve possuir no máximo 50 caracteres.</p> 
+							</div>
+						</div>	
+					  </div>
+					</div>
+					<div class="col-md-6 column">
+						
+					</div>
+				  </div>
+
+				  <div class="row clearfix linha-form">
+					<div class="col-md-6 column">
+					  <div class="row clearfix">
+						<div class="form-group" show-errors>
+							<div class="col-md-3 column" draggable="true"><label class="control-label" for="cursoExibicao">Curso Exibição</label></div>
+							<div class="col-md-9 column">
+							  <input type="text" name="cursoExibicao" id="cursoExibicao" ng-model="solicitacao.estudante.cursoExibicao" ng-maxlength=25 maxlength="25" required placeHolder="Curso Exibição(no máximo 25 caracteres)" class="form-control">
+								<p class="help-block" ng-if="formSolicitacao.curso.$error.required">[Curso Exibição] é um campo obrigatório.</p> 
+								<p class="help-block" ng-if="formSolicitacao.curso.$error.maxlength">[Curso Exibição] deve possuir no máximo 25 caracteres.</p> 
+							</div>
 						</div>
 					  </div>
 					</div>
@@ -426,38 +575,10 @@ FileAPI = {
 					</div>
 				  </div>
 
-				  <div class="row clearfix">
+				  <div class="row clearfix linha-form">
 					<div class="col-md-6 column">
 					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="curso">Curso</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.curso" id="curso" type="text" required placeHolder="Curso" class="form-control">
-						</div>
-					  </div>
-					</div>
-					<div class="col-md-6 column">
-						
-					</div>
-				  </div>
-
-				  <div class="row clearfix">
-					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="cursoExibicao">Curso Exibição</label></div>
-						<div class="col-md-9 column">
-						  <input ng-model="solicitacao.estudante.cursoExibicao" ng-maxlength=25 maxlength="25" id="cursoExibicao" type="text" required placeHolder="Curso Exibição(somente 25 caracteres)" class="form-control">
-						</div>
-					  </div>
-					</div>
-					<div class="col-md-6 column">
-						
-					</div>
-				  </div>
-
-				  <div class="row clearfix">
-					<div class="col-md-6 column">
-					  <div class="row clearfix">
-						<div class="col-md-3 column" draggable="true"><label for="localEntrega">Local de Entrega</label></div>
+						<div class="col-md-3 column" draggable="true"><label class="control-label" for="localEntrega">Local de Entrega</label></div>
 						<div class="col-md-9 column">
 						  <input ng-model="solicitacao.estudante.localEntrega" value="c" id="localEntrega" type="radio" checked disabled> Sede DCE(CPB)
 						</div>
@@ -472,14 +593,16 @@ FileAPI = {
 			  </div>
 	<!--FIM DADOS ACADEMICOS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->  
 
-	<!-- CONTRATO $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
-			  <div class="row clearfix" style="background-color: #E0F8E6">
-				<div class="col-md-12 column">
-					<input ng-model="aceiteContratoTemp" id="aceiteContrato" type="checkbox" required > Concordo com termos 
-					- 
-					<a href="" ng-click="abrirContrato()">Clique aqui para ler o regulamento</a>								
-
-				</div>
+	<!-- CONTRATO $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ #E0F8E6-->
+			  <div class="row clearfix linha-form" style="background-color: #D7DAE2">
+				<div class="form-group" show-errors>
+					<div class="col-md-12 column">
+						<input type="checkbox" name="aceiteContrato" id="aceiteContrato" ng-model="aceiteContratoTemp" required > Concordo com termos 
+						- 
+						<a href="" ng-click="abrirContrato()">Clique aqui para ler o regulamento</a>								
+							<p class="help-block" ng-if="formSolicitacao.aceiteContrato.$error.required">[Aceite no contrato] é obrigatório.</p> 
+					</div>
+				</div>	
 			  </div>          
 	<!--FIM CONTRATO $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->         
 			</div>

@@ -120,7 +120,19 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
       $scope.messagesResult.splice(index, 1);
     };
 
+
+  $scope.validarGeralForm = function(){    
+    
+    $scope.$broadcast('show-errors-check-validity');
+
+  };  
+
   $scope.salvarUser = function(){
+
+      $scope.$broadcast('show-errors-check-validity');
+
+
+      if ($scope.formSolicitacao.$valid){
 
       //Default value for Instituicao
       $scope.solicitacao.estudante.idInstituicao = 1;
@@ -178,7 +190,9 @@ crudApp.controller('SolicitacaoController', ['$scope','UserPojo', 'CampusRest', 
                  $scope.messagesResult.push({ type: 'danger', msg: messagemErroCampo });                 
             }
 
-        });                              
+        });   
+
+     }                              
   };
 
   $scope.abrirContrato = function(){
