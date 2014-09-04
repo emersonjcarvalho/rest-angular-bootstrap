@@ -2,6 +2,12 @@
 
 /* Controllers */
 
+var URL_REST_API_DOMAIN = 'http://rest-api-conline.herokuapp.com';
+var PORT_REST_API = '80';
+
+var URL_REST_API_BASE = URL_REST_API_DOMAIN + ':' + PORT_REST_API + '/';
+
+
 var crudApp = angular.module('crudApp.controllers', []);
  
 crudApp.controller('ListController', ['$scope','UserPojo', '$location', function($scope, UserPojo, $location) {
@@ -215,7 +221,8 @@ crudApp.controller('UploadFotoController', ['$scope', '$http', '$timeout', '$upl
   };
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
 
-var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/'; 
+//var URL_BASE_SERVER_UPLOAD = 'http://localhost:9000/upload/foto/'; 
+var URL_BASE_SERVER_UPLOAD = URL_REST_API_BASE +'upload/foto/'; 
 var KEY_MULTIPARTI_FILE_UPLOAD_FOTO = 'fotoFile';
 var HTTP_METHOD = 'POST';
 var MSG_ERRO_TAMANHO_FOTO = 'Imagem tamanha máximo de 300KB'
@@ -443,7 +450,8 @@ crudApp.controller('DocumentoUploadController', ['$scope', '$http', '$timeout', 
   };
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  
 
-var URL_BASE_SERVER_UPLOAD_DOCUMENTO = 'http://localhost:9000/upload/documento/'; 
+//var URL_BASE_SERVER_UPLOAD_DOCUMENTO = 'http://localhost:9000/upload/documento/'; 
+var URL_BASE_SERVER_UPLOAD_DOCUMENTO =  URL_REST_API_BASE+'upload/documento/'; 
 var KEY_MULTIPARTI_FILE_UPLOAD_DOCUMENTO = 'documentoFile';
 var HTTP_METHOD = 'POST';
 var MSG_ERRO_TAMANHO_DOCUMENTO = 'Documento tamanho máximo de 600KB';

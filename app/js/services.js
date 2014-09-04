@@ -11,6 +11,12 @@ angular.module('crudApp.services', []).
   value('version', '0.0.1');
 **/
 
+var URL_REST_API_DOMAIN = 'http://rest-api-conline.herokuapp.com';
+var PORT_REST_API = '80';
+
+var URL_REST_API_BASE = URL_REST_API_DOMAIN + ':' + PORT_REST_API + '/';
+
+
 var crudService = angular.module('crudApp.services', ['ngResource']);
 
 crudService.factory('UserPojo', function($resource){
@@ -47,7 +53,11 @@ crudService.factory('UserPojo', function($resource){
 
 crudService.factory('CampusRest', function($resource){
 
-	var campusResult = $resource('http://localhost:9000/campus', {}, {
+	console.log('URL_REST_API_BASE: ' + URL_REST_API_BASE+'campus');	
+
+	//var campusResult = $resource('http://localhost:9000/campus', {}, {
+
+	var campusResult = $resource( URL_REST_API_BASE+'campus', {}, {	
 		query: {
 			method: 'GET',
 			params: {},
@@ -63,7 +73,7 @@ crudService.factory('CampusRest', function($resource){
 
 crudService.factory('EstadoRest', function($resource){
 
-	var estadosResult = $resource('http://localhost:9000/estados', {}, {
+	var estadosResult = $resource(URL_REST_API_BASE+'estados', {}, {
 		query: {
 			method: 'GET',
 			params: {},
@@ -78,7 +88,8 @@ crudService.factory('EstadoRest', function($resource){
 
 crudService.factory('SolicitacaoRest', function($resource){
 
-	var solicitacaoResult = $resource('http://localhost:9000/solicitacao', {}, {
+	//var solicitacaoResult = $resource('http://localhost:9000/solicitacao', {}, {
+	var solicitacaoResult = $resource(URL_REST_API_BASE+'solicitacao', {}, {		
 		create: {
 			method: 'POST'							
 		}
